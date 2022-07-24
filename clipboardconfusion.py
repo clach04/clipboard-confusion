@@ -223,6 +223,13 @@ def application(environ, start_response):
     result.append(
         """<script type="text/javascript">
 function form_setfocus() {document.myform.newtext.focus();}
+/*
+** form_setfocus() works with:
+**   * GNU IceCat 31.6.0
+** and fails with:
+**   * Firefox 16.0.1
+*/
+
 function init() {
 
     form_setfocus();
@@ -232,6 +239,14 @@ function init() {
             document.forms[0].submit();
         }
     });
+    /*
+    ** ctrl-enter works with:
+    **   * GNU IceCat 31.6.0
+    ** and fails with:
+    **   * Chromium  12.0.742.112
+    **   * Firefox 3.6.18, 16.0.1
+    **   * Konqueror 4.5.5 (KDE 4.5.5)
+    */
 
 }
 
