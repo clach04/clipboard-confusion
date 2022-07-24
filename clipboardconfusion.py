@@ -328,7 +328,11 @@ window.onload=init; /* <body onload="init()"> */
         **    * GNU IceCat 31.6.0 (Developer Build 144678) Built on  Lubuntu 12.04
         **    * Konqueror 4.5.5 (KDE 4.5.5)
         */
-        copyTextToClipboard('TODO actual content goes here');
+        var text_entry_field = document.getElementById("newtext");
+
+        text_entry_field.select();
+        text_entry_field.setSelectionRange(0, 99999); /* For mobile devices */
+        copyTextToClipboard(text_entry_field.value);
     });
     </script>
     """
