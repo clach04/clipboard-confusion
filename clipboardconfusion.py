@@ -11,6 +11,7 @@ version = version_string = __version__ = '.'.join(map(str, __version_info__))
 import os
 import socket
 import sys
+
 try:
     if os.environ.get('LAUNCH_BROWSER'):
         import webbrowser
@@ -19,13 +20,14 @@ try:
 except ImportError:
     webbrowser = None
 from wsgiref.simple_server import make_server
+
 try:
     # py2
     from cgi import escape
     from cgi import parse_qs
     from urllib import quote, quote_plus
 except ImportError:
-    # Python 3.8 and later 
+    # Python 3.8 and later
     # py3
     from html import escape
     from urllib.parse import quote, quote_plus
@@ -34,6 +36,7 @@ except ImportError:
 
 try:
     import android
+
     droid = android.Android()
 except ImportError:
     android = droid = None
@@ -70,20 +73,25 @@ def display_console_qrcode_pyqrcodeng(url):
     print('-' *65)
     """
     qr.term()  # this "prints" to stdout/tty/console (works for win32)
-    #print(qr.terminal())  # this generates ANSI/VT100 escape sequences (not suitable for win32)
+    # print(qr.terminal())  # this generates ANSI/VT100 escape sequences (not suitable for win32)
 
 
 def display_console_qrcode_segno(url):
     # NOTE segno could be used for desktop (maybe) web browser launching with locally generated SVG and/or PNG
     qr = segno.make(url)
-    #print(dir(qr))
-    #print(qr)
+    # print(dir(qr))
+    # print(qr)
     qr.terminal()
 
 
 display_console_qrcode = None
-if pyqrcodeng: display_console_qrcode = display_console_qrcode_pyqrcodeng  # note officially unmaintained
-if segno: display_console_qrcode = display_console_qrcode_segno
+if pyqrcodeng:
+    display_console_qrcode = (
+        display_console_qrcode_pyqrcodeng  # note officially unmaintained
+    )
+if segno:
+    display_console_qrcode = display_console_qrcode_segno
+
 
 def gen_qrcode_url(url, image_size=547):
     """Construct QR generator google URL with max size, from:
@@ -96,34 +104,38 @@ def gen_qrcode_url(url, image_size=547):
     See https://google-developers.appspot.com/chart/infographics/docs/overview
     """
     url = quote(url)
-    #url = quote_plus(url)
+    # url = quote_plus(url)
     image_size_str = '%dx%d' % (image_size, image_size)
-    result = 'https://chart.googleapis.com/chart?cht=qr&chs=%s&chl=%s' % (image_size_str, url)
+    result = 'https://chart.googleapis.com/chart?cht=qr&chs=%s&chl=%s' % (
+        image_size_str,
+        url,
+    )
     return result
 
 
 # Utility function to guess the IP (as a string) where the server can be
 # reached from the outside. Quite nasty problem actually.
 
-def find_ip ():
-   # we get a UDP-socket for the TEST-networks reserved by IANA.
-   # It is highly unlikely, that there is special routing used
-   # for these networks, hence the socket later should give us
-   # the ip address of the default route.
-   # We're doing multiple tests, to guard against the computer being
-   # part of a test installation.
 
-   candidates = []
-   for test_ip in ["192.0.2.0", "198.51.100.0", "203.0.113.0"]:
-      s = socket.socket (socket.AF_INET, socket.SOCK_DGRAM)
-      s.connect ((test_ip, 80))
-      ip_addr = s.getsockname ()[0]
-      s.close ()
-      if ip_addr in candidates:
-         return ip_addr
-      candidates.append (ip_addr)
+def find_ip():
+    # we get a UDP-socket for the TEST-networks reserved by IANA.
+    # It is highly unlikely, that there is special routing used
+    # for these networks, hence the socket later should give us
+    # the ip address of the default route.
+    # We're doing multiple tests, to guard against the computer being
+    # part of a test installation.
 
-   return candidates[0]
+    candidates = []
+    for test_ip in ["192.0.2.0", "198.51.100.0", "203.0.113.0"]:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect((test_ip, 80))
+        ip_addr = s.getsockname()[0]
+        s.close()
+        if ip_addr in candidates:
+            return ip_addr
+        candidates.append(ip_addr)
+
+    return candidates[0]
 
 
 if xerox is None:
@@ -131,10 +143,13 @@ if xerox is None:
     class FakeXerox:
         def __init__(self):
             self.txt = ''
+
         def copy(self, new_text):
             self.txt = new_text
+
         def paste(self):
             return self.txt
+
     xerox = FakeXerox()
 
 
@@ -144,6 +159,7 @@ def copy(new_text):
     else:
         xerox.copy(new_text)
 
+
 def paste():
     if droid:
         x = droid.getClipboard()
@@ -151,6 +167,7 @@ def paste():
     else:
         result = xerox.paste()
     return result
+
 
 def application(environ, start_response):
     status = '200 OK'
@@ -197,7 +214,8 @@ def application(environ, start_response):
     result.append('<html>')
     result.append('<head>')
     result.append('<meta http-equiv="Content-Type" content="text/html; charset=utf-8">')
-    result.append("""<script type="text/javascript">
+    result.append(
+        """<script type="text/javascript">
 function form_setfocus() {document.myform.newtext.focus();}
 function init() {
 
@@ -213,45 +231,54 @@ function init() {
 
 window.onload=init; /* <body onload="init()"> */
 </script>
-    """)
+    """
+    )
     result.append('</head>')
-    #result.append("""<body onload="init()">""")
+    # result.append("""<body onload="init()">""")
     result.append("""<body>""")
-    print('DEBUG clipboard contents=',repr(clipboard_contents))
+    print('DEBUG clipboard contents=', repr(clipboard_contents))
     x = escape(clipboard_contents)
     #'''
-    result.append("""
+    result.append(
+        """
     <pre>
-        <code>""")
+        <code>"""
+    )
     result.append(x)
-    result.append("""</code>
+    result.append(
+        """</code>
     </pre>
-    """)
+    """
+    )
     #'''
 
-    result.append("""
+    result.append(
+        """
     <form accept-charset="utf-8" action="setclipboard" method="POST" id="myform" name="myform">
         <label>Current clipboard contents:</label>
         <br />
         <!-- TODO There is way to get textarea to be 100 percent via CSS and/or javascript, however most browsers allow manual resizing of text area. See http://stackoverflow.com/questions/271067/how-can-i-make-a-textarea-100-width-without-overflowing-when-padding-is-present (using a textwrapper div) -->
-        <textarea rows="25" cols="80" id="newtext" name="newtext" accept-charset="utf-8">""")
+        <textarea rows="25" cols="80" id="newtext" name="newtext" accept-charset="utf-8">"""
+    )
     result.append(x)
-    result.append("""</textarea>
+    result.append(
+        """</textarea>
         <br />
         <input type="submit" value="Update clipboard"/>
     </form>
-    """)
+    """
+    )
     result.append("""</body>""")
 
     result.append('</html>')
-    #import pdb ; pdb.set_trace()
+    # import pdb ; pdb.set_trace()
     start_response(status, response_headers)
     return [''.join(result).encode('utf-8')]
 
 
 def doit():
     hostname = '0.0.0.0'
-    #hostname = 'localhost'
+    # hostname = 'localhost'
     port = int(os.environ.get('PORT', 8000))
     print('Open http://%s:%d' % (hostname, port))
     print('Issue CTRL-C (Windows CTRL-Break instead) to stop')
@@ -259,7 +286,7 @@ def doit():
     ip_addr = find_ip()
     url_str = "http://%s:%s/" % (ip_addr, port)
     print(url_str)
-    #display_console_qrcode = webbrowser = None  # Quick disable launch browser and QRcode
+    # display_console_qrcode = webbrowser = None  # Quick disable launch browser and QRcode
     qrcode_url = gen_qrcode_url(url_str)
     print(qrcode_url)
     if display_console_qrcode:
