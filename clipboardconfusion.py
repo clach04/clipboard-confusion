@@ -45,6 +45,11 @@ try:
 except ImportError:
     pyqrcodeng = None
 
+try:
+    import xerox  # NOTE use https://github.com/clach04/xerox/
+except ImportError:
+    xerox = None
+
 
 def display_console_qrcode_pyqrcodeng(url):
     # NOTE pyqrcodeng could be used for desktop (maybe) web browser launching with locally generated SVG and/or PNG
@@ -117,22 +122,18 @@ def find_ip ():
 
    return candidates[0]
 
-if android is None:
-    try:
-        import xerox  # NOTE use https://github.com/clach04/xerox/tree/win_no_crash until PR merged -- from https://github.com/kennethreitz/xerox
-    except ImportError:
-        if os.environ.get('FAKE_XEROX') is None:
-            raise
-        else:
-            # no clipboard access, so store/cache locally
-            class FakeXerox:
-                def __init__(self):
-                    self.txt = ''
-                def copy(self, new_text):
-                    self.txt = new_text
-                def paste(self):
-                    return self.txt
-            xerox = FakeXerox()
+
+if xerox is None:
+    # no clipboard access, so store/cache locally
+    class FakeXerox:
+        def __init__(self):
+            self.txt = ''
+        def copy(self, new_text):
+            self.txt = new_text
+        def paste(self):
+            return self.txt
+    xerox = FakeXerox()
+
 
 def copy(new_text):
     if droid:
