@@ -8,6 +8,7 @@
 version_tuple = __version_info__ = (0, 0, 2, 'git')
 version = version_string = __version__ = '.'.join(map(str, __version_info__))
 
+import logging
 import os
 import socket
 import sys
@@ -56,6 +57,11 @@ try:
 except ImportError:
     xerox = None
 
+
+log = logging.getLogger(__name__)
+logging.basicConfig()
+log.setLevel(level=logging.INFO)
+#log.setLevel(level=logging.DEBUG)
 
 def display_console_qrcode_pyqrcodeng(url):
     # NOTE pyqrcodeng could be used for desktop (maybe) web browser launching with locally generated SVG and/or PNG
@@ -188,7 +194,7 @@ def application(environ, start_response):
     # Read POST body
     request_body = environ['wsgi.input'].read(request_body_size)
     """
-    print('DEBUG request_body_size', repr(request_body_size))
+    log.debug('request_body_size %r', request_body_size)
     if request_body_size:
         print('read with size')
         request_body = environ['wsgi.input'].read(request_body_size)
@@ -196,17 +202,17 @@ def application(environ, start_response):
         print('read with NO size')
         request_body = environ['wsgi.input'].read()  # seen under Linux, if zero passed in, will read zero bytes!
     """
-    print('DEBUG request_body', repr(request_body))
+    log.debug('request_body %r', request_body)
     sys.stdout.flush()  # DEBUG
     d = parse_qs(request_body.decode('utf-8'))
-    print('DEBUG d', repr(d))
+    log.debug('d %r', d)
     new_clipboard_text = d.get('newtext')
-    print('DEBUG new_clipboard_text %s' % repr(new_clipboard_text))
+    log.debug('new_clipboard_text %sr' % new_clipboard_text)
     if new_clipboard_text is not None:
         new_clipboard_text = ''.join(new_clipboard_text)
         new_clipboard_text = new_clipboard_text
         copy(new_clipboard_text)
-    print('DEBUG new_clipboard_text', repr(new_clipboard_text))
+    log.debug('new_clipboard_text %r', new_clipboard_text)
     ###################################################
 
     clipboard_contents = paste()
@@ -236,7 +242,7 @@ window.onload=init; /* <body onload="init()"> */
     result.append('</head>')
     # result.append("""<body onload="init()">""")
     result.append("""<body>""")
-    print('DEBUG clipboard contents=', repr(clipboard_contents))
+    log.debug('clipboard contents=%r', clipboard_contents)
     x = escape(clipboard_contents)
     #'''
     result.append(
