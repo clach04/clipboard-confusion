@@ -292,7 +292,7 @@ window.onload=init; /* <body onload="init()"> */
     """
     )
 
-    result.append("""<button class="js-copy-to-clipboard">Copy to (browser) clipboard</button><br />""")
+    result.append("""<button class="js-copy-to-clipboard" id="js-copy-to-clipboard">Copy to (browser) clipboard</button><br />""")
 
     result.append(
         """
@@ -314,7 +314,8 @@ window.onload=init; /* <body onload="init()"> */
         """
     <script>
 
-    var copyClipBtn = document.querySelector('button.js-copy-to-clipboard');
+    //var copyClipBtn = document.querySelector('button.js-copy-to-clipboard');
+    var copyClipBtn = document.getElementById("js-copy-to-clipboard");
 
     copyClipBtn.addEventListener('click', function(event) {
         /*
