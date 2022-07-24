@@ -2,12 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim:ts=4:sw=4:softtabstop=4:smarttab:expandtab
 #
-"""View and change clipboard remotely
-
-TODO Python3 support
-
-TODO android support into xerox?
-
+"""Pure Python 2 and 3 in-memory, single document pastebin, with optional clipboard support with some qrcode support
 """
 
 import urllib  # FIXME py2 only
