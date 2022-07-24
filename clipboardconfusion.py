@@ -223,6 +223,7 @@ def application(environ, start_response):
     result.append(
         """<script type="text/javascript">
 function form_setfocus() {document.myform.newtext.focus();}
+
 function init() {
 
     form_setfocus();
@@ -316,8 +317,17 @@ window.onload=init; /* <body onload="init()"> */
     var copyClipBtn = document.querySelector('button.js-copy-to-clipboard');
 
     copyClipBtn.addEventListener('click', function(event) {
-	// works with Chromium	79.0.3945.79
-	// works with FireFox 46.0
+        /*
+        ** Works/Tested with:
+        **    * Chromium 79.0.3945.79
+        **    * FireFox 46.0, 86.0
+        **
+        ** Fails with:
+        **    * Chromium  12.0.742.112 (Developer Build 90304) Ubuntu 10.10 -  WebKit  534.30 (trunk@84325)
+        **    * Firefox 3.6.18, 16.0.1
+        **    * GNU IceCat 31.6.0 (Developer Build 144678) Built on  Lubuntu 12.04
+        **    * Konqueror 4.5.5 (KDE 4.5.5)
+        */
         copyTextToClipboard('TODO actual content goes here');
     });
     </script>
