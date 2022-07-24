@@ -5,6 +5,9 @@
 """Pure Python 2 and 3 in-memory, single document pastebin, with optional clipboard support with some qrcode support
 """
 
+version_tuple = __version_info__ = (0, 0, 1, 'git')
+version = version_string = __version__ = '.'.join(map(str, __version_info__))
+
 import os
 import socket
 import sys
@@ -252,6 +255,7 @@ def main(argv=None):
         argv = sys.argv
 
     print('Python %s on %s' % (sys.version, sys.platform))
+    print('Clipboard Confusion v%s' % __version__)
     doit()
 
     return 0
