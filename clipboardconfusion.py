@@ -197,7 +197,26 @@ def application(environ, start_response):
     result.append('<html>')
     result.append('<head>')
     result.append('<meta http-equiv="Content-Type" content="text/html; charset=utf-8">')
+    result.append("""<script type="text/javascript">
+function form_setfocus() {document.myform.newtext.focus();}
+function init() {
+
+    form_setfocus();
+
+    document.addEventListener('keydown', (event) => {
+        if(event.ctrlKey && event.key == "Enter") {
+            document.forms[0].submit();
+        }
+    });
+
+}
+
+window.onload=init; /* <body onload="init()"> */
+</script>
+    """)
     result.append('</head>')
+    #result.append("""<body onload="init()">""")
+    result.append("""<body>""")
     print('DEBUG clipboard contents=',repr(clipboard_contents))
     x = escape(clipboard_contents)
     #'''
@@ -215,13 +234,15 @@ def application(environ, start_response):
         <label>Current clipboard contents:</label>
         <br />
         <!-- TODO There is way to get textarea to be 100 percent via CSS and/or javascript, however most browsers allow manual resizing of text area. See http://stackoverflow.com/questions/271067/how-can-i-make-a-textarea-100-width-without-overflowing-when-padding-is-present (using a textwrapper div) -->
-        <textarea rows="25" cols="80" name="newtext"  accept-charset="utf-8">""")
+        <textarea rows="25" cols="80" id="newtext" name="newtext" accept-charset="utf-8">""")
     result.append(x)
     result.append("""</textarea>
         <br />
         <input type="submit" value="Update clipboard"/>
     </form>
     """)
+    result.append("""</body>""")
+
     result.append('</html>')
     #import pdb ; pdb.set_trace()
     start_response(status, response_headers)
