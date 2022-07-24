@@ -5,7 +5,6 @@
 """Pure Python 2 and 3 in-memory, single document pastebin, with optional clipboard support with some qrcode support
 """
 
-import urllib  # FIXME py2 only
 import os
 import socket
 import sys
