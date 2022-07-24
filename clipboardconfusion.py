@@ -316,6 +316,8 @@ window.onload=init; /* <body onload="init()"> */
     var copyClipBtn = document.querySelector('button.js-copy-to-clipboard');
 
     copyClipBtn.addEventListener('click', function(event) {
+	// works with Chromium	79.0.3945.79
+	// works with FireFox 46.0
         copyTextToClipboard('TODO actual content goes here');
     });
     </script>
