@@ -244,7 +244,6 @@ window.onload=init; /* <body onload="init()"> */
     result.append("""<body>""")
     log.debug('clipboard contents=%r', clipboard_contents)
     x = escape(clipboard_contents)
-    #'''
     result.append(
         """
     <pre>
@@ -256,7 +255,6 @@ window.onload=init; /* <body onload="init()"> */
     </pre>
     """
     )
-    #'''
 
     result.append(
         """
@@ -283,10 +281,10 @@ window.onload=init; /* <body onload="init()"> */
 
 
 def doit():
-    hostname = '0.0.0.0'
-    # hostname = 'localhost'
+    hostname = '0.0.0.0'  # allow any client
+    # hostname = 'localhost'  # limit to local only
     port = int(os.environ.get('PORT', 8000))
-    print('Open http://%s:%d' % (hostname, port))
+    print('Attempting to listen on http://%s:%d' % (hostname, port))
     print('Issue CTRL-C (Windows CTRL-Break instead) to stop')
 
     ip_addr = find_ip()
