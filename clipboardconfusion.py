@@ -324,6 +324,12 @@ window.onload=init; /* <body onload="init()"> */
     """
     )
     result.append(
+        """    <a href="https://github.com/clach04/clipboard-confusion/">
+    https://github.com/clach04/clipboard-confusion/
+    </a>
+    """
+    )
+    result.append(
         """
     <script>
 
