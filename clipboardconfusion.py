@@ -290,6 +290,50 @@ window.onload=init; /* <body onload="init()"> */
 </script>
     """
     )
+    # TODO server static local version of js file, below requires internet access
+    result.append("""
+<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
+<script>
+    // Show the QR-Code of a data-permalink (when the QR-Code icon is clicked).
+    function showQrCode(caller,loading)
+    {
+        // Remove previous qrcode if present.
+        removeQrcode();
+
+        // Build the div which contains the QR-Code:
+        var element = document.createElement('div');
+        element.id = 'permalinkQrcode';
+
+        // Make QR-Code div commit sepuku when clicked:
+        if ( element.attachEvent ){
+            element.attachEvent('onclick', 'this.parentNode.removeChild(this);' );
+
+        } else {
+            // Damn IE
+            element.setAttribute('onclick', 'this.parentNode.removeChild(this);' );
+        }
+
+        element.innerHTML += "<br>Click to close";
+        caller.parentNode.appendChild(element);
+        new QRCode(document.getElementById(element.id), caller.dataset.permalink);
+        qrcodeImage = document.getElementById(element.id);
+        // make sure QR code is actually shown - Workaround to deal with newly created element lag for transition.
+        window.getComputedStyle(qrcodeImage).opacity;
+        qrcodeImage.className = 'show';
+        return false;
+    }
+
+    // Remove any displayed QR-Code
+    function removeQrcode()
+    {
+        var elem = document.getElementById('permalinkQrcode');
+        if (elem) {
+            elem.parentNode.removeChild(elem);
+        }
+        return false;
+    }
+</script>
+""")
     result.append('</head>')
     # result.append("""<body onload="init()">""")
     result.append("""<body>""")
@@ -324,6 +368,15 @@ window.onload=init; /* <body onload="init()"> */
     </form>
     """
     )
+    result.append(
+        """        <a href="#" onclick="showQrCode(this); return false;" class="qrcode" data-permalink="https://google.com">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/QR_icon.svg" class="linklist-plugin-icon" title="QR-Code" alt="QRCode">
+            <!-- qricon.png is converted from https://commons.wikimedia.org/wiki/File:QR_icon.svg -->
+        </a>
+    """
+    )
+    # TODO server static version of png, above requires internet access
+    #         <img src="/static/qricon.png" class="linklist-plugin-icon" title="QR-Code" alt="QRCode">
     result.append(
         """    <a href="https://github.com/clach04/clipboard-confusion/">
     Clipboard Confusion - a single file, in-memory pastebin
