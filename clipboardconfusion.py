@@ -220,6 +220,7 @@ def application(environ, start_response):
     result.append('<html>')
     result.append('<head>')
     result.append('<meta http-equiv="Content-Type" content="text/html; charset=utf-8">')
+    result.append('<title>Clipboard Confusion</title>')
     result.append(
         """<script type="text/javascript">
 function form_setfocus() {document.myform.newtext.focus();}
