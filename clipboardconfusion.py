@@ -296,8 +296,7 @@ window.onload=init; /* <body onload="init()"> */
     x = escape(clipboard_contents)
     result.append(
         """
-    <pre>
-        <code>"""
+    <pre><code>"""
     )
     result.append(x)
     result.append(
