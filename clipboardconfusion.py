@@ -294,7 +294,7 @@ window.onload=init; /* <body onload="init()"> */
     result.append("""
 <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
 <script>
-    // Show the QR-Code of a data-permalink (when the QR-Code icon is clicked).
+    // Show the QR-Code of a "value" attribute (when the QR-Code icon is clicked).
     function showQrCode(caller,loading)
     {
         // Remove previous qrcode if present.
@@ -315,7 +315,7 @@ window.onload=init; /* <body onload="init()"> */
 
         element.innerHTML += "<br>Click to close";
         caller.parentNode.appendChild(element);
-        new QRCode(document.getElementById(element.id), caller.dataset.permalink);
+        new QRCode(document.getElementById(element.id), caller.value);
         qrcodeImage = document.getElementById(element.id);
         // make sure QR code is actually shown - Workaround to deal with newly created element lag for transition.
         window.getComputedStyle(qrcodeImage).opacity;
@@ -369,7 +369,7 @@ window.onload=init; /* <body onload="init()"> */
     """
     )
     result.append(
-        """        <a href="#" onclick="showQrCode(this); return false;" class="qrcode" data-permalink="https://google.com">
+        """        <a href="#" onclick="showQrCode(newtext); return false;" class="qrcode">
             <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/QR_icon.svg" class="linklist-plugin-icon" title="QR-Code" alt="QRCode">
             <!-- qricon.png is converted from https://commons.wikimedia.org/wiki/File:QR_icon.svg -->
         </a>
