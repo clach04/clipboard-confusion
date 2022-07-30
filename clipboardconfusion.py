@@ -315,7 +315,7 @@ window.onload=init; /* <body onload="init()"> */
 
         element.innerHTML += "<br>Click to close";
         caller.parentNode.appendChild(element);
-        new QRCode(document.getElementById(element.id), value || caller.value);
+        new QRCode(document.getElementById(element.id), value || caller.value || caller.innerText);
         qrcodeImage = document.getElementById(element.id);
         // make sure QR code is actually shown - Workaround to deal with newly created element lag for transition.
         window.getComputedStyle(qrcodeImage).opacity;
@@ -341,7 +341,7 @@ window.onload=init; /* <body onload="init()"> */
     x = escape(clipboard_contents)
     result.append(
         """
-    <pre><code>"""
+    <pre><code id="clipboard_contents">"""
     )
     result.append(x)
     result.append(
@@ -368,6 +368,8 @@ window.onload=init; /* <body onload="init()"> */
     </form>
     """
     )
+
+    # qrcode for Text Entry Form
     result.append(
         """
         <a href="#" onclick="showQrCode(newtext); return false;" class="qrcode">
@@ -376,6 +378,18 @@ window.onload=init; /* <body onload="init()"> */
         </a>
     """
     )
+
+    # qrcode for code tag/pastebin
+    result.append(
+        """
+        <a href="#" onclick="showQrCode(clipboard_contents); return false;" class="qrcode">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/QR_icon.svg" class="linklist-plugin-icon" title="Show QRCode for clipboard_contents" alt="data QR-Code">
+            <!-- qricon.png is converted from https://commons.wikimedia.org/wiki/File:QR_icon.svg -->
+        </a>
+    """
+    )
+
+    # qrcode for Window URL
     result.append(
         """
         <a href="#" onclick="showQrCode(newtext, window.location.href); return false;" class="qrcode">
