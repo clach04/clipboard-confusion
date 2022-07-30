@@ -295,7 +295,7 @@ window.onload=init; /* <body onload="init()"> */
 <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
 <script>
     // Show the QR-Code of a "value" attribute (when the QR-Code icon is clicked).
-    function showQrCode(caller,loading)
+    function showQrCode(caller, value)
     {
         // Remove previous qrcode if present.
         removeQrcode();
@@ -315,7 +315,7 @@ window.onload=init; /* <body onload="init()"> */
 
         element.innerHTML += "<br>Click to close";
         caller.parentNode.appendChild(element);
-        new QRCode(document.getElementById(element.id), caller.value);
+        new QRCode(document.getElementById(element.id), value || caller.value);
         qrcodeImage = document.getElementById(element.id);
         // make sure QR code is actually shown - Workaround to deal with newly created element lag for transition.
         window.getComputedStyle(qrcodeImage).opacity;
@@ -350,7 +350,7 @@ window.onload=init; /* <body onload="init()"> */
     """
     )
 
-    result.append("""<button class="js-copy-to-clipboard" id="js-copy-to-clipboard">Copy to (browser) clipboard</button><br />""")
+    result.append("""<button class="js-copy-to-clipboard" id="js-copy-to-clipboard">Copy Text Entry Field to (browser) clipboard</button><br />""")
 
     result.append(
         """
@@ -364,18 +364,27 @@ window.onload=init; /* <body onload="init()"> */
     result.append(
         """</textarea>
         <br />
-        <input type="submit" value="Update clipboard"/>
+        <input type="submit" value="Update"/>
     </form>
     """
     )
     result.append(
-        """        <a href="#" onclick="showQrCode(newtext); return false;" class="qrcode">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/QR_icon.svg" class="linklist-plugin-icon" title="QR-Code" alt="QRCode">
+        """
+        <a href="#" onclick="showQrCode(newtext); return false;" class="qrcode">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/QR_icon.svg" class="linklist-plugin-icon" title="Show QRCode for Text Entry Field" alt="data QR-Code">
             <!-- qricon.png is converted from https://commons.wikimedia.org/wiki/File:QR_icon.svg -->
         </a>
     """
     )
-    # TODO server static version of png, above requires internet access
+    result.append(
+        """
+        <a href="#" onclick="showQrCode(newtext, window.location.href); return false;" class="qrcode">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/QR_icon.svg" class="linklist-plugin-icon" title="Show QRCode for URL" alt="URL QR-Code">
+            <!-- qricon.png is converted from https://commons.wikimedia.org/wiki/File:QR_icon.svg -->
+        </a>
+    """
+    )
+    # TODO server static version of qrcode icon and source code, above requires internet access
     #         <img src="/static/qricon.png" class="linklist-plugin-icon" title="QR-Code" alt="QRCode">
     result.append(
         """    <a href="https://github.com/clach04/clipboard-confusion/">
