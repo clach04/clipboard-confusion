@@ -4,9 +4,11 @@ Pure Python 2 and 3 in-memory, single document pastebin, with optional clipboard
 
 ## Setup
 
-To get started:
+To get started, *optionally*:
 
     python -m pip install git+https://github.com/clach04/xerox.git
+
+xerox is NOT required for simple in-mempry pastebin suppport. xerox is only needed to update the server clipboard, see https://github.com/clach04/xerox/ for potential additional requirements per platform.
 
 To run, issue:
 
@@ -20,7 +22,7 @@ or
 
 Issue CTRL-Break on Windows to stop/kill and CTRL-C under Linux/Unix.
 
-NOTE should also run under Jython (IronPython untested)
+Also runs under Jython 2.5+ (2.2 doesn't ship wsgi support out of box), IronPython untested.
 
 ## History
 
