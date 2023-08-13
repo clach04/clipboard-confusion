@@ -180,6 +180,7 @@ def application(environ, start_response):
     response_headers = [
         ('Content-Type', 'text/html'),
         ('Cache-Control', 'no-cache'),
+        ('X-Content-Type-Options', 'nosniff'),  # no-sniff
     ]
     # content length?
 
