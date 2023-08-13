@@ -217,6 +217,7 @@ def application(environ, start_response):
 
     clipboard_contents = paste()
     result = []
+    result.append('<!DOCTYPE html>')
     result.append('<html>')
     result.append('<head>')
     result.append('<meta http-equiv="Content-Type" content="text/html; charset=utf-8">')
