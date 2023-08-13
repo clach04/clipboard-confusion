@@ -4,11 +4,16 @@ Pure Python 2 and 3 in-memory, single document pastebin, with optional clipboard
 
 ## Setup
 
-To get started, *optionally*:
+To get started, *optionally* enable (server) clipboard support:
 
     python -m pip install git+https://github.com/clach04/xerox.git
 
 xerox is NOT required for simple in-memory pastebin support. xerox is only needed to update the server clipboard, see https://github.com/clach04/xerox/ for potential additional requirements per platform.
+
+*Optionally* enable (local) QRcode support:
+
+    python -m pip install segno
+
 
 To run, issue:
 
