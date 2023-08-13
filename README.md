@@ -8,7 +8,7 @@ To get started, *optionally*:
 
     python -m pip install git+https://github.com/clach04/xerox.git
 
-xerox is NOT required for simple in-mempry pastebin suppport. xerox is only needed to update the server clipboard, see https://github.com/clach04/xerox/ for potential additional requirements per platform.
+xerox is NOT required for simple in-memory pastebin support. xerox is only needed to update the server clipboard, see https://github.com/clach04/xerox/ for potential additional requirements per platform.
 
 To run, issue:
 
