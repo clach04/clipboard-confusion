@@ -458,6 +458,8 @@ def doit():
     print(qrcode_url)
     if display_console_qrcode:
         display_console_qrcode(url_str)
+    else:
+        print('console qrcode support missing, install segno or pyqrcodeng')
     if webbrowser:
         webbrowser.open(qrcode_url)
 
