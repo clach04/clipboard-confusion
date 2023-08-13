@@ -177,7 +177,10 @@ def paste():
 
 def application(environ, start_response):
     status = '200 OK'
-    response_headers = [('Content-Type', 'text/html')]
+    response_headers = [
+        ('Content-Type', 'text/html'),
+        ('Cache-Control', 'no-cache'),
+    ]
     # content length?
 
     path_info = environ['PATH_INFO']
