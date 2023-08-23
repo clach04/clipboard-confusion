@@ -298,7 +298,6 @@ window.onload=init; /* <body onload="init()"> */
     )
 
     # comment out as of 2023-08-19 silently broken QR code support import (usage still below and now loudly broken)
-    '''
     # TODO server static local version of js file, below requires internet access
     result.append("""
 <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
@@ -343,8 +342,6 @@ window.onload=init; /* <body onload="init()"> */
     }
 </script>
 """)
-    '''
-
     result.append('</head>')
     # result.append("""<body onload="init()">""")
     result.append("""<body>""")
