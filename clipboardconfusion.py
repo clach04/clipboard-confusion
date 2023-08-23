@@ -174,6 +174,33 @@ def paste():
         result = xerox.paste()
     return result
 
+"""
+version:
+
+commit 04f46c6a0708418cb7b96fc563eacae0fbf77674 (HEAD -> master, origin/master, origin/HEAD)
+Merge: 540308a bd3de7f
+Author: Sangmin, Shim <ssm0123@gmail.com>
+Date:   Wed Nov 25 19:43:20 2015 +0900
+
+    Merge pull request #63 from markvantilburg/patch-1
+
+    Update README.md
+
+NOTE .min.js version in that repo is from 2013-07-12
+non-min is a litle over a year later. - Both work with clipboard confusion.
+
+from https://github.com/davidshimjs/qrcodejs.git
+MIT license
+
+> Browser Compatibility
+>
+> IE6~10, Chrome, Firefox, Safari, Opera, Mobile Safari, Android, Windows Mobile, ETC.
+"""
+qr_code_js_filename = 'qrcode.min.js'
+#qr_code_js_filename = 'qrcode.js'
+f = open(qr_code_js_filename, 'rb')
+qrcode_js_bytes = f.read()
+f.close()
 
 def application(environ, start_response):
     status = '200 OK'
@@ -185,6 +212,14 @@ def application(environ, start_response):
     # content length?
 
     path_info = environ['PATH_INFO']
+    if path_info == '/qrcode.min.js':
+        response_headers = [
+            ('Content-Type', 'text/javascript'),
+            ('Cache-Control', 'no-cache'),  # revisit this
+            ('X-Content-Type-Options', 'nosniff'),  # no-sniff
+        ]
+        start_response(status, response_headers)
+        return [qrcode_js_bytes]
 
     # Returns a dictionary in which the values are lists
     get_dict = parse_qs(environ['QUERY_STRING'])
@@ -299,8 +334,10 @@ window.onload=init; /* <body onload="init()"> */
 
     # comment out as of 2023-08-19 silently broken QR code support import (usage still below and now loudly broken)
     # TODO server static local version of js file, below requires internet access
+    # <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
+    # <script src="./qrcode.min.js"></script>
     result.append("""
-<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
+<script src="./qrcode.min.js"></script>
 <script>
     // Show the QR-Code of a "value" attribute (when the QR-Code icon is clicked).
     function showQrCode(caller, value)
