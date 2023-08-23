@@ -495,6 +495,7 @@ def doit():
     print('Issue CTRL-C (Windows CTRL-Break instead) to stop')
 
     ip_addr = find_ip()
+    print("http://%s:%s/" % ('localhost', port))
     url_str = "http://%s:%s/" % (ip_addr, port)
     print(url_str)
     # display_console_qrcode = webbrowser = None  # Quick disable launch browser and QRcode
