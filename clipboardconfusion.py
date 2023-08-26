@@ -343,7 +343,7 @@ window.onload=init; /* <body onload="init()"> */
     // Show the QR-Code of a "value" attribute (when the QR-Code icon is clicked).
     /*
         Where the parent node of the caller will have the qr code appended too - TODO consider using node directly?
-        value is used as string value to generate qrcode, or parent with .value, or parent with .innerText
+        value is used as string value to generate qrcode, if missing use parent with .value, or parent with .innerText
     */
     function showQrCode(caller, value)
     {
