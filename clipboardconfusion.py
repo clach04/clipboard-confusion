@@ -437,6 +437,7 @@ window.onload=init; /* <body onload="init()"> */
     # TODO server static version of qrcode icon and source code, above requires internet access
     #         <img src="/static/qricon.png" class="linklist-plugin-icon" title="QR-Code" alt="QRCode">
 
+    result.append('<hr>')
     result.append(
         """
     <pre><code id="clipboard_contents">"""
@@ -447,8 +448,8 @@ window.onload=init; /* <body onload="init()"> */
     </pre>
     """
     )
+    result.append('<hr>')
 
-    result.append('<br />')
     result.append(
         """    <a href="https://github.com/clach04/clipboard-confusion/">
     Clipboard Confusion - a single file, in-memory pastebin
