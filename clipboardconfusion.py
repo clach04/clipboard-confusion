@@ -202,6 +202,12 @@ f = open(qr_code_js_filename, 'rb')
 qrcode_js_bytes = f.read()
 f.close()
 
+# TODO consider using PNG instead?
+qr_code_svg_filename = 'QR_icon.svg'
+f = open(qr_code_svg_filename, 'rb')
+qrcode_svg_bytes = f.read()
+f.close()
+
 def application(environ, start_response):
     status = '200 OK'
     response_headers = [
@@ -220,6 +226,14 @@ def application(environ, start_response):
         ]
         start_response(status, response_headers)
         return [qrcode_js_bytes]
+    elif path_info == '/QR_icon.svg':
+        response_headers = [
+            ('Content-Type', 'image/svg+xml'),
+            #('Cache-Control', 'no-cache'),  # revisit this
+            ('X-Content-Type-Options', 'nosniff'),  # no-sniff
+        ]
+        start_response(status, response_headers)
+        return [qrcode_svg_bytes]
 
     # Returns a dictionary in which the values are lists
     get_dict = parse_qs(environ['QUERY_STRING'])
@@ -397,7 +411,7 @@ window.onload=init; /* <body onload="init()"> */
     result.append(
         """
         <a href="#" onclick="showQrCode(newtext, null, qrcode_window); return false;" class="qrcode">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/QR_icon.svg" class="linklist-plugin-icon" title="Show QRCode for Text Entry Field" alt="data QR-Code">
+            <img src="./QR_icon.svg" class="linklist-plugin-icon" title="Show QRCode for Text Entry Field" alt="data form QR-Code">
             <!-- qricon.png is converted from https://commons.wikimedia.org/wiki/File:QR_icon.svg -->
         </a>
     """
@@ -407,7 +421,7 @@ window.onload=init; /* <body onload="init()"> */
     result.append(
         """
         <a href="#" onclick="showQrCode(clipboard_contents, null, qrcode_window); return false;" class="qrcode">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/QR_icon.svg" class="linklist-plugin-icon" title="Show QRCode for clipboard_contents" alt="data QR-Code">
+            <img src="./QR_icon.svg" class="linklist-plugin-icon" title="Show QRCode for clipboard_contents" alt="data QR-Code">
             <!-- qricon.png is converted from https://commons.wikimedia.org/wiki/File:QR_icon.svg -->
         </a>
     """
@@ -417,7 +431,7 @@ window.onload=init; /* <body onload="init()"> */
     result.append(
         """
         <a href="#" onclick="showQrCode(qrcode_window, window.location.href); return false;" class="qrcode">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/QR_icon.svg" class="linklist-plugin-icon" title="Show QRCode for URL" alt="URL QR-Code">
+            <img src="./QR_icon.svg" class="linklist-plugin-icon" title="Show QRCode for URL" alt="URL QR-Code">
             <!-- qricon.png is converted from https://commons.wikimedia.org/wiki/File:QR_icon.svg -->
         </a>
     """
