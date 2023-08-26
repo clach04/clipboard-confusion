@@ -255,6 +255,9 @@ def application(environ, start_response):
     ###################################################
 
     clipboard_contents = paste()
+    log.debug('clipboard contents=%r', clipboard_contents)
+    x = escape(clipboard_contents)
+
     result = []
     result.append('<!DOCTYPE html>')
     result.append('<html lang="en">')
@@ -382,18 +385,6 @@ window.onload=init; /* <body onload="init()"> */
     result.append('</head>')
     # result.append("""<body onload="init()">""")
     result.append("""<body>""")
-    log.debug('clipboard contents=%r', clipboard_contents)
-    x = escape(clipboard_contents)
-    result.append(
-        """
-    <pre><code id="clipboard_contents">"""
-    )
-    result.append(x)
-    result.append(
-        """</code>
-    </pre>
-    """
-    )
 
     result.append("""<button class="js-copy-to-clipboard" id="js-copy-to-clipboard">Copy Text Entry Field to (browser) clipboard</button><br />""")
 
@@ -445,6 +436,18 @@ window.onload=init; /* <body onload="init()"> */
     )
     # TODO server static version of qrcode icon and source code, above requires internet access
     #         <img src="/static/qricon.png" class="linklist-plugin-icon" title="QR-Code" alt="QRCode">
+
+    result.append(
+        """
+    <pre><code id="clipboard_contents">"""
+    )
+    result.append(x)
+    result.append(
+        """</code>
+    </pre>
+    """
+    )
+
     result.append('<br />')
     result.append(
         """    <a href="https://github.com/clach04/clipboard-confusion/">
