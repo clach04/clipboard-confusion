@@ -344,9 +344,11 @@ window.onload=init; /* <body onload="init()"> */
     /*
         Where the parent node of the caller will have the qr code appended too - TODO consider using node directly?
         value is used as string value to generate qrcode, if missing use parent with .value, or parent with .innerText
+        if parent_node is passed in, use that as place to put qrcode, else parent of caller
     */
-    function showQrCode(caller, value)
+    function showQrCode(caller, value, parent_node)
     {
+        parent_node = parent_node || caller.parentNode;
         // Remove previous qrcode if present.
         removeQrcode();
 
@@ -364,7 +366,7 @@ window.onload=init; /* <body onload="init()"> */
         }
 
         element.innerHTML += "<br>Click to close";
-        caller.parentNode.appendChild(element);
+        parent_node.appendChild(element);
         new QRCode(document.getElementById(element.id), value || caller.value || caller.innerText);
         qrcodeImage = document.getElementById(element.id);
         // make sure QR code is actually shown - Workaround to deal with newly created element lag for transition.
@@ -394,7 +396,7 @@ window.onload=init; /* <body onload="init()"> */
     # qrcode for Text Entry Form
     result.append(
         """
-        <a href="#" onclick="showQrCode(newtext); return false;" class="qrcode">
+        <a href="#" onclick="showQrCode(newtext, null, qrcode_window); return false;" class="qrcode">
             <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/QR_icon.svg" class="linklist-plugin-icon" title="Show QRCode for Text Entry Field" alt="data QR-Code">
             <!-- qricon.png is converted from https://commons.wikimedia.org/wiki/File:QR_icon.svg -->
         </a>
@@ -404,7 +406,7 @@ window.onload=init; /* <body onload="init()"> */
     # qrcode for code tag/pastebin
     result.append(
         """
-        <a href="#" onclick="showQrCode(clipboard_contents); return false;" class="qrcode">
+        <a href="#" onclick="showQrCode(clipboard_contents, null, qrcode_window); return false;" class="qrcode">
             <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/QR_icon.svg" class="linklist-plugin-icon" title="Show QRCode for clipboard_contents" alt="data QR-Code">
             <!-- qricon.png is converted from https://commons.wikimedia.org/wiki/File:QR_icon.svg -->
         </a>
