@@ -335,14 +335,16 @@ window.onload=init; /* <body onload="init()"> */
     """
     )
 
-    # comment out as of 2023-08-19 silently broken QR code support import (usage still below and now loudly broken)
-    # TODO server static local version of js file, below requires internet access
     # <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
     # <script src="./qrcode.min.js"></script>
     result.append("""
 <script src="./qrcode.min.js"></script>
 <script>
     // Show the QR-Code of a "value" attribute (when the QR-Code icon is clicked).
+    /*
+        Where the parent node of the caller will have the qr code appended too - TODO consider using node directly?
+        value is used as string value to generate qrcode
+    */
     function showQrCode(caller, value)
     {
         // Remove previous qrcode if present.
@@ -387,23 +389,7 @@ window.onload=init; /* <body onload="init()"> */
     result.append("""<body>""")
 
     result.append("""<button class="js-copy-to-clipboard" id="js-copy-to-clipboard">Copy Text Entry Field to (browser) clipboard</button><br />""")
-
-    result.append(
-        """
-    <form accept-charset="utf-8" action="setclipboard" method="POST" id="myform" name="myform">
-        <label for="newtext">Current clipboard contents:</label>
-        <br />
-        <!-- TODO There is way to get textarea to be 100 percent via CSS and/or javascript, however most browsers allow manual resizing of text area. See http://stackoverflow.com/questions/271067/how-can-i-make-a-textarea-100-width-without-overflowing-when-padding-is-present (using a textwrapper div) -->
-        <textarea rows="25" cols="80" id="newtext" name="newtext" accept-charset="utf-8">"""
-    )
-    result.append(x)
-    result.append(
-        """</textarea>
-        <br />
-        <input type="submit" value="Update"/>
-    </form>
-    """
-    )
+    result.append("""<div><div class="qrcode_window" id="qrcode_window" name="qrcode_window"></div></div>""")
 
     # qrcode for Text Entry Form
     result.append(
@@ -428,7 +414,7 @@ window.onload=init; /* <body onload="init()"> */
     # qrcode for Window URL
     result.append(
         """
-        <a href="#" onclick="showQrCode(newtext, window.location.href); return false;" class="qrcode">
+        <a href="#" onclick="showQrCode(qrcode_window, window.location.href); return false;" class="qrcode">
             <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/QR_icon.svg" class="linklist-plugin-icon" title="Show QRCode for URL" alt="URL QR-Code">
             <!-- qricon.png is converted from https://commons.wikimedia.org/wiki/File:QR_icon.svg -->
         </a>
@@ -436,6 +422,24 @@ window.onload=init; /* <body onload="init()"> */
     )
     # TODO server static version of qrcode icon and source code, above requires internet access
     #         <img src="/static/qricon.png" class="linklist-plugin-icon" title="QR-Code" alt="QRCode">
+
+
+    result.append(
+        """
+    <form accept-charset="utf-8" action="setclipboard" method="POST" id="myform" name="myform">
+        <label for="newtext">Current clipboard contents:</label>
+        <br />
+        <!-- TODO There is way to get textarea to be 100 percent via CSS and/or javascript, however most browsers allow manual resizing of text area. See http://stackoverflow.com/questions/271067/how-can-i-make-a-textarea-100-width-without-overflowing-when-padding-is-present (using a textwrapper div) -->
+        <textarea rows="25" cols="80" id="newtext" name="newtext" accept-charset="utf-8">"""
+    )
+    result.append(x)
+    result.append(
+        """</textarea>
+        <br />
+        <input type="submit" value="Update"/>
+    </form>
+    """
+    )
 
     result.append('<hr>')
     result.append(
