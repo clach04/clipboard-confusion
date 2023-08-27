@@ -29,6 +29,12 @@ Issue CTRL-Break on Windows to stop/kill and CTRL-C under Linux/Unix.
 
 Also runs under Jython 2.5+ (2.2 doesn't ship wsgi support out of box), IronPython untested.
 
+## Docker
+
+    docker build -t clipboardconfusion .
+    docker run -p 8000:8000 --name clipboardconfusion --hostname clipboardconfusion --restart=unless-stopped clipboardconfusion
+
+
 ## History
 
 Based on https://github.com/clach04/toys4droids/blob/master/remote_clipboard.py
