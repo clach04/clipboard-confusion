@@ -31,7 +31,8 @@ Also runs under Jython 2.5+ (2.2 doesn't ship wsgi support out of box), IronPyth
 
 ## Docker
 
-    docker build -t clipboardconfusion .
+    #docker build -t clipboardconfusion .
+    docker build -f Dockerfile_alpine -t clipboardconfusion .
     docker run -p 8000:8000 --name clipboardconfusion --hostname clipboardconfusion --restart=unless-stopped clipboardconfusion
 
 
