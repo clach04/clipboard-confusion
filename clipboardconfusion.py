@@ -442,8 +442,12 @@ window.onload=init; /* <body onload="init()"> */
     #         <img src="/static/qricon.png" class="linklist-plugin-icon" title="QR-Code" alt="QRCode">
 
     if isinstance(xerox, FakeXerox):
-        print('clipboard support missing, install xerox (or Android support lib)')
-        # FIXME impact html generation below
+        # TODO make pretty/styled
+        result.append(
+        """<br />clipboard support missing, install xerox (or Android support lib)
+        <br />
+    """
+        )
 
     result.append(
         """
