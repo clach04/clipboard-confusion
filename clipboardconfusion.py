@@ -143,19 +143,19 @@ def find_ip():
 
     return candidates[0]
 
+class FakeXerox:
+    # store/cache locally - no clipboard access
+    def __init__(self):
+        self.txt = ''
+
+    def copy(self, new_text):
+        self.txt = new_text
+
+    def paste(self):
+        return self.txt
 
 if xerox is None:
     # no clipboard access, so store/cache locally
-    class FakeXerox:
-        def __init__(self):
-            self.txt = ''
-
-        def copy(self, new_text):
-            self.txt = new_text
-
-        def paste(self):
-            return self.txt
-
     xerox = FakeXerox()
 
 
@@ -441,6 +441,9 @@ window.onload=init; /* <body onload="init()"> */
     # TODO server static version of qrcode icon and source code, above requires internet access
     #         <img src="/static/qricon.png" class="linklist-plugin-icon" title="QR-Code" alt="QRCode">
 
+    if isinstance(xerox, FakeXerox):
+        print('clipboard support missing, install xerox (or Android support lib)')
+        # FIXME impact html generation below
 
     result.append(
         """
@@ -532,6 +535,8 @@ def doit():
         display_console_qrcode(url_str)
     else:
         print('console qrcode support missing, install segno or pyqrcodeng')
+    if isinstance(xerox, FakeXerox):
+        print('clipboard support missing, install xerox (or Android support lib)')
     if webbrowser:
         webbrowser.open(qrcode_url)
 
