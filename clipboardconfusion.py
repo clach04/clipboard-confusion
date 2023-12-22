@@ -270,6 +270,10 @@ def application(environ, start_response):
 
     clipboard_contents = paste()
     log.debug('clipboard contents=%r', clipboard_contents)
+    character_count = len(clipboard_contents)
+    character_count_str = "{:,} characters".format(character_count)  # NOTE py2.7+ and requires locale to be setup
+    character_count_str += " (%d characters)" % character_count
+    # TODO stats; byte size/count, line count, word count?
     x = escape(clipboard_contents)
 
     result = []
@@ -452,7 +456,10 @@ window.onload=init; /* <body onload="init()"> */
     result.append(
         """
     <form accept-charset="utf-8" action="setclipboard" method="POST" id="myform" name="myform">
-        <label for="newtext">Current clipboard contents:</label>
+        <label for="newtext">Current clipboard contents:</label>"""
+    )
+    result.append(character_count_str)  # stats
+    result.append("""
         <br />
         <!-- TODO There is way to get textarea to be 100 percent via CSS and/or javascript, however most browsers allow manual resizing of text area. See http://stackoverflow.com/questions/271067/how-can-i-make-a-textarea-100-width-without-overflowing-when-padding-is-present (using a textwrapper div) -->
         <textarea id="newtext" name="newtext" accept-charset="utf-8" style="width:100%;height:50%">"""
@@ -466,6 +473,7 @@ window.onload=init; /* <body onload="init()"> */
     """
     )
 
+    result.append(character_count_str)  # stats
     result.append('<hr>')
     result.append(
         """
