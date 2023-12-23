@@ -12,6 +12,7 @@ import logging
 import os
 import socket
 import sys
+import time
 
 try:
     if os.environ.get('LAUNCH_BROWSER'):
@@ -159,20 +160,23 @@ if xerox is None:
     xerox = FakeXerox()
 
 
-def copy(new_text):
+def clipboard_copy(new_text):
     if droid:
         droid.setClipboard(new_text)
     else:
         xerox.copy(new_text)
 
 
-def paste():
+def clipboard_paste():
     if droid:
         x = droid.getClipboard()
         result = x.result
     else:
         result = xerox.paste()
     return result
+
+def current_timestamp_for_header():
+    return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 """
 version:
@@ -234,6 +238,20 @@ def application(environ, start_response):
         ]
         start_response(status, response_headers)
         return [qrcode_svg_bytes]
+    elif path_info == '/download':
+        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
+        result = clipboard_paste().encode('utf-8')
+        response_headers = [
+            ('Content-Type', 'text/plain'), # TODO? + '; charset=utf-8'
+            ('Content-Disposition', 'attachment; filename="clipboard_utf8.txt"'),
+            #('Cache-Control', 'no-cache'),  # revisit this
+            ('X-Content-Type-Options', 'nosniff'),  # no-sniff
+            ('Last-Modified', current_timestamp_for_header()),  # TODO could use time of last paste...
+            ('Content-Length', '%d' % len(result)),i
+        ]
+        start_response(status, response_headers)
+        return [result]
+    # else assume update/view clipboard
 
     # Returns a dictionary in which the values are lists
     get_dict = parse_qs(environ['QUERY_STRING'])
@@ -264,11 +282,11 @@ def application(environ, start_response):
     if new_clipboard_text is not None:
         new_clipboard_text = ''.join(new_clipboard_text)
         new_clipboard_text = new_clipboard_text
-        copy(new_clipboard_text)
+        clipboard_copy(new_clipboard_text)
     log.debug('new_clipboard_text %r', new_clipboard_text)
     ###################################################
 
-    clipboard_contents = paste()
+    clipboard_contents = clipboard_paste()
     log.debug('clipboard contents=%r', clipboard_contents)
     character_count = len(clipboard_contents)
     character_count_str = "{:,} characters".format(character_count)  # NOTE py2.7+ and requires locale to be setup
@@ -472,6 +490,7 @@ window.onload=init; /* <body onload="init()"> */
     </form>
     """
     )
+    # TODO add option to download as text file, e.g. URL /download
 
     result.append(character_count_str)  # stats
     result.append('<hr>')
@@ -529,10 +548,17 @@ window.onload=init; /* <body onload="init()"> */
     return [''.join(result).encode('utf-8')]
 
 
-def doit():
+def doit(filename=None):
     hostname = '0.0.0.0'  # allow any client
     # hostname = 'localhost'  # limit to local only
     port = int(os.environ.get('PORT', 8000))
+
+    if filename:
+        print('Using file %s as initial clipboard contents' % (filename, ))
+        f = open(filename, 'r')  # assume locale encoding...
+        clipboard_copy(f.read())
+        f.close()
+
     print('Attempting to listen on http://%s:%d' % (hostname, port))
     print('Issue CTRL-C (Windows CTRL-Break instead) to stop')
 
@@ -562,7 +588,11 @@ def main(argv=None):
 
     print('Python %s on %s' % (sys.version, sys.platform))
     print('Clipboard Confusion v%s' % __version__)
-    doit()
+    try:
+        filename = argv[1]
+    except IndexError:
+        filename = None
+    doit(filename=filename)
 
     return 0
 

@@ -19,11 +19,13 @@ To run, issue:
 
     python3 clipboardconfusion.py
     py -3 clipboardconfusion.py
+    py -3 clipboardconfusion.py clipboardconfusion.py  # start with source code for this tool in clipboard
 
 or
 
     python2 clipboardconfusion.py
     py -2 clipboardconfusion.py
+    py -2 clipboardconfusion.py clipboardconfusion.py  # start with source code for this tool in clipboard
 
 Issue CTRL-Break on Windows to stop/kill and CTRL-C under Linux/Unix.
 
