@@ -247,7 +247,7 @@ def application(environ, start_response):
             #('Cache-Control', 'no-cache'),  # revisit this
             ('X-Content-Type-Options', 'nosniff'),  # no-sniff
             ('Last-Modified', current_timestamp_for_header()),  # TODO could use time of last paste...
-            ('Content-Length', '%d' % len(result)),i
+            ('Content-Length', '%d' % len(result)),
         ]
         start_response(status, response_headers)
         return [result]
@@ -428,7 +428,9 @@ window.onload=init; /* <body onload="init()"> */
     # result.append("""<body onload="init()">""")
     result.append("""<body>""")
 
-    result.append("""<button class="js-copy-to-clipboard" id="js-copy-to-clipboard">Copy Text Entry Field to (browser) clipboard</button><br />""")
+    result.append("""<button class="js-copy-to-clipboard" id="js-copy-to-clipboard">Copy Text Entry Field to (browser) clipboard</button>""")
+    result.append(' <a href="/download">Download</a>')  # TODO styled button
+    result.append("""<br />""")
     result.append("""<div><div class="qrcode_window" id="qrcode_window" name="qrcode_window"></div></div>""")
 
     # qrcode for Text Entry Form
@@ -487,10 +489,10 @@ window.onload=init; /* <body onload="init()"> */
         """</textarea>
         <br />
         <input type="submit" value="Update"/>
+        <a href="/download">Download</a>
     </form>
     """
     )
-    # TODO add option to download as text file, e.g. URL /download
 
     result.append(character_count_str)  # stats
     result.append('<hr>')
