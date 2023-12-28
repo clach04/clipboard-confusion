@@ -422,6 +422,18 @@ window.onload=init; /* <body onload="init()"> */
         }
         return false;
     }
+
+    function rot13(s)  // just so we have something for testing
+    {
+      return s.replace( /[A-Za-z]/g , function(c) { return String.fromCharCode( c.charCodeAt(0) + ( c.toUpperCase() <= "M" ? 13 : -13 ) ); } );
+    }
+    function encrypt(caller)
+    {
+        var plain_text = caller.value;
+        console.log('encrypt plain_text:' + plain_text);
+        //caller.value = 'pants';
+        caller.value = rot13(caller.value);
+    }
 </script>
 """)
     result.append('</head>')
@@ -472,6 +484,16 @@ window.onload=init; /* <body onload="init()"> */
         <br />
     """
         )
+
+    result.append(
+        """
+        <a href="#" onclick="encrypt(newtext); return false;" class="encrypt">
+            Encrypt Entry Field Contents
+        </a>
+
+        <br />
+    """
+    )
 
     result.append(
         """
