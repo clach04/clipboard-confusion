@@ -52,7 +52,7 @@ The web interface has a work-in-progress support for decrypting (only) the conte
 It ONLY supports openssl encrypted with:
   * aes-256-cbc
   * salt
-  * PBKDF2 with itereration count of 10000 (10,000, i.e. 10K). NOTE in 2023 this iteration count is considere too small
+  * PBKDF2 with itereration count of 10000 (10,000, i.e. 10K). NOTE in 2023 this iteration count is considered too small
 
 ### Docker
 
