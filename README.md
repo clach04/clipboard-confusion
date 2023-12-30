@@ -44,7 +44,8 @@ NOTE file is assumed to be text (utf-8) and **not** binary.
 
 You can serve an encrypted file using bash shell [process substitution](http://www.tldp.org/LDP/abs/html/process-sub.html):
 
-    cat /etc/os-release |openssl enc -e -aes-256-cbc -in - -out - -base64 -salt -pbkdf2 -iter 10000  -pass pass:password | \
+    cat /etc/os-release | \
+        openssl enc -e -aes-256-cbc -in - -out - -base64 -salt -pbkdf2 -iter 10000  -pass pass:password | \
         ./clipboardconfusion.py /dev/stdin
 
 The web interface has a work-in-progress support for decrypting (only) the contents of the textentry field in the form.
