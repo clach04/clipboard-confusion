@@ -422,6 +422,107 @@ window.onload=init; /* <body onload="init()"> */
         }
         return false;
     }
+
+    function base64ToArrayBuffer(base64) {
+        var binaryString = atob(base64);
+        console.log('base64ToArrayBuffer binaryString:' + binaryString);
+        console.log('base64ToArrayBuffer binaryString[0]:' + binaryString[0]);
+        console.log('base64ToArrayBuffer binaryString[1]:' + binaryString[1]);
+        var bytes = new Uint8Array(binaryString.length);
+        for (var i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        //return bytes.buffer;
+        return bytes;
+    }
+    // https://developer.chrome.com/blog/how-to-convert-arraybuffer-to-and-from-string
+    function ab2str(buf) {
+        return String.fromCharCode.apply(null, new Uint8Array(buf));
+    }
+
+    const MAGIC_SALTED = "Salted__";
+
+    async function decrypt(caller, password)
+    {
+        // little to no error checking/handling, and no UI notification of failure (or even success)
+        var password_str = password.value;  // get from password form (pform) - TODO support for non-7-bit values
+        var crypted_text = caller.value;
+        console.log('encrypt password:' + password.value);
+        console.log('decrypt crypted_text:' + crypted_text);
+        // TODO support KeepOut .kpt header - see https://github.com/clach04/openssl_enc_compat/issues/2
+        /*
+            echo hello| "C:\Program Files\Git\mingw64\bin\openssl.exe" aes-256-cbc -e -salt -pbkdf2 -iter 10000 -in - -a -out - -pass pass:password
+            U2FsdGVkX18NXhFhTlAyvM2jXPu+hhsT344TvO0yLYk=
+        */
+        console.log('decrypt crypted_text:' + crypted_text);
+        var crypted_bytes = base64ToArrayBuffer(crypted_text);
+        console.log('decrypt crypted_bytes:' + crypted_bytes);
+        console.log('decrypt crypted_bytes.length:' + crypted_bytes.length);
+        console.log('decrypt crypted_bytes[0]:' + crypted_bytes[0]);
+        console.log('decrypt crypted_bytes[1]:' + crypted_bytes[1]);
+        var raw_binary_prefix = ab2str(crypted_bytes.subarray(0, MAGIC_SALTED.length));
+        if (! raw_binary_prefix.startsWith(MAGIC_SALTED))
+        {
+            // doesn't look like an OpenSSL (salted) encrypted payload
+            // Could have checked base64 string first but this is a more robust check
+            return;
+        }
+
+        var openssl_pbkdf2_iterations = 10000;  // TODO pickup from on screen field
+        var password_bytes = new TextEncoder("utf-8").encode(password_str);
+        var openssl_pbkdf2_salt = crypted_bytes.slice(8, 16);
+
+        var passphrasekey_cryptokey = await crypto.subtle.importKey('raw', password_bytes, {name: 'PBKDF2'}, false, ['deriveBits']);  // CryptoKey
+        var derived_key_plus_iv_bytes = await crypto.subtle.deriveBits({"name": 'PBKDF2', "salt": openssl_pbkdf2_salt, "iterations": openssl_pbkdf2_iterations, "hash": 'SHA-256'}, passphrasekey_cryptokey, 384); // Generate 48-bytes (384-bits) key+IV into an ArrayBuffer
+        derived_key_plus_iv_bytes = new Uint8Array(derived_key_plus_iv_bytes);  // ArrayBuffer to Uint8Array
+        console.log('decrypt derived_key_plus_iv_bytes:' + derived_key_plus_iv_bytes);
+        console.log('decrypt derived_key_plus_iv_bytes.length:' + derived_key_plus_iv_bytes.length);
+        console.log('decrypt derived_key_plus_iv_bytes[0]:' + derived_key_plus_iv_bytes[0]);
+        console.log('decrypt derived_key_plus_iv_bytes[1]:' + derived_key_plus_iv_bytes[1]);
+
+        var key_bytes = derived_key_plus_iv_bytes.slice(0,32);  // Uint8Array -- 32-bytes (256-bits) for key
+        console.log('decrypt key_bytes:' + key_bytes);
+        console.log('decrypt key_bytes.length:' + key_bytes.length);
+        console.log('decrypt key_bytes[0]:' + key_bytes[0]);
+        console.log('decrypt key_bytes[1]:' + key_bytes[1]);
+        var iv_bytes = derived_key_plus_iv_bytes.slice(32);  // Uint8Array -- 16-bytes (128-bits) for IV
+        console.log('decrypt iv_bytes:' + iv_bytes);
+        console.log('decrypt iv_bytes.length:' + iv_bytes.length);
+        console.log('decrypt iv_bytes[0]:' + iv_bytes[0]);
+        console.log('decrypt iv_bytes[1]:' + iv_bytes[1]);
+        var cipherbytes = crypted_bytes.slice(16);
+        console.log('decrypt cipherbytes:' + cipherbytes);
+        console.log('decrypt cipherbytes[0]:' + cipherbytes[0]);
+
+
+        var key = await crypto.subtle.importKey('raw', key_bytes, {name: 'AES-CBC', length: 256}, false, ['decrypt']);  // CryptoKey
+        console.log('decrypt key:' + key);
+        var plaintextbytes = await crypto.subtle.decrypt({name: "AES-CBC", iv: iv_bytes}, key, cipherbytes);  // ArrayBuffer
+        console.log('decrypt plaintextbytes:' + plaintextbytes);
+        /*
+        // Debug for potential further manipulation
+        plaintextbytes = new Uint8Array(plaintextbytes);  // ArrayBuffer to Uint8Array
+        console.log('decrypt plaintextbytes:' + plaintextbytes);
+        console.log('decrypt plaintextbytes.length:' + plaintextbytes.length);
+        console.log('decrypt plaintextbytes[0]:' + plaintextbytes[0]);
+        console.log('decrypt plaintextbytes[1]:' + plaintextbytes[1]);
+        */
+
+        caller.value = ab2str(plaintextbytes);
+    }
+
+    function rot13(s)  // just so we have something for testing
+    {
+      return s.replace( /[A-Za-z]/g , function(c) { return String.fromCharCode( c.charCodeAt(0) + ( c.toUpperCase() <= "M" ? 13 : -13 ) ); } );
+    }
+    function encrypt(caller, password)
+    {
+        var plain_text = caller.value;
+        console.log('encrypt password:' + password.value);
+        console.log('encrypt plain_text:' + plain_text);
+        //caller.value = 'pants';
+        caller.value = rot13(caller.value);  // FIXME TODO implement
+    }
 </script>
 """)
     result.append('</head>')
@@ -472,6 +573,25 @@ window.onload=init; /* <body onload="init()"> */
         <br />
     """
         )
+
+    result.append(
+        """
+        <!-- TODO hide form unless clicked -->
+        <!-- NOTE https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API only works for http with localhost (and file://), requires https otherwise -->
+        <form accept-charset="utf-8" action="#" method="#" id="pform" name="pform">
+            <label for="p">p:</label><input type="text" id="p" name="p" />
+            <input type="submit" value="FIXME"/>
+            <a href="#" onclick="encrypt(newtext, p); return false;" class="encrypt">
+                Encrypt Entry Field Contents
+            </a> <!-- TODO button  -->
+            <a href="#" onclick="decrypt(newtext, p); return false;" class="decrypt">
+                Decrypt Entry Field Contents
+            </a> <!-- TODO button  -->
+            <!-- TODO button to download decrypted file using textfield as encrypte source -->
+        </form>
+        <br />
+    """
+    )
 
     result.append(
         """

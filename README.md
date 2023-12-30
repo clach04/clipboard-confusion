@@ -14,6 +14,9 @@ xerox is NOT required for simple in-memory pastebin support. xerox is only neede
 
     python -m pip install segno
 
+## Running
+
+### Natively
 
 To run, issue:
 
@@ -31,7 +34,26 @@ Issue CTRL-Break on Windows to stop/kill and CTRL-C under Linux/Unix.
 
 Also runs under Jython 2.5+ (2.2 doesn't ship wsgi support out of box), IronPython untested.
 
-## Docker
+#### Serving a file
+
+    clipboardconfusion.py /etc/os-release
+
+NOTE file is assumed to be text (utf-8) and **not** binary.
+
+#### OpenSSL encrypted AES-256-CBC with PBKDF2
+
+You can serve an encrypted file using bash shell [process substitution](http://www.tldp.org/LDP/abs/html/process-sub.html):
+
+    cat /etc/os-release |openssl enc -e -aes-256-cbc -in - -out - -base64 -salt -pbkdf2 -iter 10000  -pass pass:password | \
+        ./clipboardconfusion.py /dev/stdin
+
+The web interface has a work-in-progress support for decrypting (only) the contents of the textentry field in the form.
+It ONLY supports openssl encrypted with:
+  * aes-256-cbc
+  * salt
+  * PBKDF2 with itereration count of 10000 (10,000, i.e. 10K). NOTE in 2023 this iteration count is considere too small
+
+### Docker
 
     #docker build -t clipboardconfusion .
     docker build -f Dockerfile_alpine -t clipboardconfusion .
