@@ -222,6 +222,7 @@ def application(environ, start_response):
     # content length?
 
     path_info = environ['PATH_INFO']
+    print('DEBUG entry path_info %r' % path_info) ; sys.stdout.flush()
     if path_info == '/qrcode.min.js':
         response_headers = [
             ('Content-Type', 'text/javascript'),
@@ -546,7 +547,9 @@ window.onload=init; /* <body onload="init()"> */
 
     result.append('</html>')
     # import pdb ; pdb.set_trace()
+    print('DEBUG path_info %r pre start_response' % path_info) ; sys.stdout.flush()
     start_response(status, response_headers)
+    print('DEBUG path_info %r pre return' % path_info) ; sys.stdout.flush()
     return [''.join(result).encode('utf-8')]
 
 
