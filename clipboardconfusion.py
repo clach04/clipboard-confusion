@@ -469,7 +469,7 @@ window.onload=init; /* <body onload="init()"> */
     if isinstance(xerox, FakeXerox):
         # TODO make pretty/styled
         result.append(
-        """<br />clipboard support missing, install xerox (or Android support lib)
+        """<br /><b>Native clipboard support missing</b>, install xerox (or Android support lib), using non-persistent/temporary memory.
         <br />
     """
         )
