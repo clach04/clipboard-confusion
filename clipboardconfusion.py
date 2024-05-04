@@ -320,7 +320,8 @@ function init() {
 
     document.addEventListener('keydown', (event) => {
         if(event.ctrlKey && event.key == "Enter") {
-            document.forms[0].submit();
+            //document.forms[0].submit();
+            document.myform.submit();
         }
     });
     /*
