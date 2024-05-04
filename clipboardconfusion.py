@@ -222,6 +222,7 @@ def application(environ, start_response):
     # content length?
 
     path_info = environ['PATH_INFO']
+    print('DEBUG entry path_info %r' % path_info) ; sys.stdout.flush()
     if path_info == '/qrcode.min.js':
         response_headers = [
             ('Content-Type', 'text/javascript'),
@@ -319,7 +320,8 @@ function init() {
 
     document.addEventListener('keydown', (event) => {
         if(event.ctrlKey && event.key == "Enter") {
-            document.forms[0].submit();
+            //document.forms[0].submit();
+            document.myform.submit();
         }
     });
     /*
@@ -569,7 +571,7 @@ window.onload=init; /* <body onload="init()"> */
     if isinstance(xerox, FakeXerox):
         # TODO make pretty/styled
         result.append(
-        """<br />clipboard support missing, install xerox (or Android support lib)
+        """<br /><b>Native clipboard support missing</b>, install xerox (or Android support lib), using non-persistent/temporary memory.
         <br />
     """
         )
@@ -666,7 +668,9 @@ window.onload=init; /* <body onload="init()"> */
 
     result.append('</html>')
     # import pdb ; pdb.set_trace()
+    print('DEBUG path_info %r pre start_response' % path_info) ; sys.stdout.flush()
     start_response(status, response_headers)
+    print('DEBUG path_info %r pre return' % path_info) ; sys.stdout.flush()
     return [''.join(result).encode('utf-8')]
 
 
