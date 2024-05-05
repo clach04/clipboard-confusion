@@ -311,8 +311,6 @@ def application(environ, start_response):
     #result.append('<!DOCTYPE html>')
     #result.append('<html lang="en">')
 
-    ##result.append(' <a href="/download">Download</a>')  # TODO styled button
-
     # qrcode for Window URL
     #....
     # TODO server static version of qrcode icon and source code, above requires internet access
