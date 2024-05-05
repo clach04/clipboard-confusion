@@ -6,71 +6,71 @@
 <title>Clipboard Confusion</title>
 
 <script type="text/javascript">
-function form_setfocus() {document.myform.newtext.focus();}
-/*
-** form_setfocus() works with:
-**   * GNU IceCat 31.6.0
-** and fails with:
-**   * Firefox 16.0.1
-*/
-
-function init() {
-
-    form_setfocus();
-
-    document.addEventListener('keydown', (event) => {
-        if(event.ctrlKey && event.key == "Enter") {
-            //document.forms[0].submit();
-            document.myform.submit();
-        }
-    });
+    function form_setfocus() {document.myform.newtext.focus();}
     /*
-    ** ctrl-enter works with:
+    ** form_setfocus() works with:
     **   * GNU IceCat 31.6.0
     ** and fails with:
-    **   * Chromium  12.0.742.112
-    **   * Firefox 3.6.18, 16.0.1
-    **   * Konqueror 4.5.5 (KDE 4.5.5)
+    **   * Firefox 16.0.1
     */
 
-}
+    function init() {
 
-    function fallbackCopyTextToClipboard(text) {
-        var textArea = document.createElement("textarea");
-        textArea.value = text;
+        form_setfocus();
 
-        // Avoid scrolling to bottom
-        textArea.style.top = "0";
-        textArea.style.left = "0";
-        textArea.style.position = "fixed";
-
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-
-        try {
-            var successful = document.execCommand('copy');
-            var msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Fallback: Copying text command was ' + msg);
-        } catch (err) {
-            console.error('Fallback: Oops, unable to copy', err);
-        }
-
-        document.body.removeChild(textArea);
-    }
-    function copyTextToClipboard(text) {
-        if (!navigator.clipboard) {
-            fallbackCopyTextToClipboard(text);
-            return;
-        }
-        navigator.clipboard.writeText(text).then(function() {
-            console.log('Async: Copying to clipboard was successful!');
-        }, function(err) {
-            console.error('Async: Could not copy text: ', err);
+        document.addEventListener('keydown', (event) => {
+            if(event.ctrlKey && event.key == "Enter") {
+                //document.forms[0].submit();
+                document.myform.submit();
+            }
         });
+        /*
+        ** ctrl-enter works with:
+        **   * GNU IceCat 31.6.0
+        ** and fails with:
+        **   * Chromium  12.0.742.112
+        **   * Firefox 3.6.18, 16.0.1
+        **   * Konqueror 4.5.5 (KDE 4.5.5)
+        */
+
     }
 
-window.onload=init; /* <body onload="init()"> */
+        function fallbackCopyTextToClipboard(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+
+            // Avoid scrolling to bottom
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? 'successful' : 'unsuccessful';
+                console.log('Fallback: Copying text command was ' + msg);
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+            }
+
+            document.body.removeChild(textArea);
+        }
+        function copyTextToClipboard(text) {
+            if (!navigator.clipboard) {
+                fallbackCopyTextToClipboard(text);
+                return;
+            }
+            navigator.clipboard.writeText(text).then(function() {
+                console.log('Async: Copying to clipboard was successful!');
+            }, function(err) {
+                console.error('Async: Could not copy text: ', err);
+            });
+        }
+
+    window.onload=init; /* <body onload="init()"> */
 </script>
     
 <script src="./qrcode.min.js"></script>
