@@ -429,6 +429,17 @@ window.onload=init; /* <body onload="init()"> */
     result.append('</head>')
     # result.append("""<body onload="init()">""")
     result.append("""<body>""")
+    result.append("""<noscript>
+<div id="noscript" class="noscript" style="color: black; background-color: #ffe633 ; text-align: center; border: double yellow;">
+<p>
+This page partially works when JavaScript is disabled.
+Here are the <a href="https://www.enable-javascript.com/">
+instructions how to enable JavaScript in your web browser</a>
+(or check <a href="https://noscript.net/">NoScript browser plugin</a>).
+</p>
+</div>
+</noscript>
+""")
 
     result.append("""<button class="js-copy-to-clipboard" id="js-copy-to-clipboard">Copy Text Entry Field to (browser) clipboard</button>""")
     result.append(' <a href="/download">Download</a>')  # TODO styled button
