@@ -40,7 +40,7 @@ Also runs under Jython 2.5+ (2.2 doesn't ship wsgi support out of box), IronPyth
 
 NOTE file is assumed to be text (utf-8) and **not** binary.
 
-## Docker
+### Docker
 
     #docker build -t clipboardconfusion .
     docker build -f Dockerfile_alpine -t clipboardconfusion .
