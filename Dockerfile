@@ -13,6 +13,7 @@ ADD clipboardconfusion.py .
 # may need dos2unix
 ADD qrcode.min.js .
 ADD QR_icon.svg .
+ADD templates templates
 
 # TODO PORT environment variable, defaults to 8000
 # Allow external connections
