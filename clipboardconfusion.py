@@ -311,11 +311,6 @@ def application(environ, start_response):
     #result.append('<!DOCTYPE html>')
     #result.append('<html lang="en">')
 
-    # qrcode for Window URL
-    #....
-    # TODO server static version of qrcode icon and source code, above requires internet access
-    #         <img src="/static/qricon.png" class="linklist-plugin-icon" title="QR-Code" alt="QRCode">
-
     if isinstance(xerox, FakeXerox):
         # TODO make pretty/styled
         clipboard_missing_warning = """<br /><b>Native clipboard support missing</b>, install xerox (or Android support lib), using non-persistent/temporary memory.
