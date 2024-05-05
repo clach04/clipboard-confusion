@@ -316,7 +316,6 @@ def application(environ, start_response):
     # TODO server static version of qrcode icon and source code, above requires internet access
     #         <img src="/static/qricon.png" class="linklist-plugin-icon" title="QR-Code" alt="QRCode">
 
-    # FIXME! TODO
     if isinstance(xerox, FakeXerox):
         # TODO make pretty/styled
         clipboard_missing_warning = """<br /><b>Native clipboard support missing</b>, install xerox (or Android support lib), using non-persistent/temporary memory.
