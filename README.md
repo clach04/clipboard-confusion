@@ -14,6 +14,9 @@ xerox is NOT required for simple in-memory pastebin support. xerox is only neede
 
     python -m pip install segno
 
+## Running
+
+### Natively
 
 To run, issue:
 
@@ -30,6 +33,12 @@ or
 Issue CTRL-Break on Windows to stop/kill and CTRL-C under Linux/Unix.
 
 Also runs under Jython 2.5+ (2.2 doesn't ship wsgi support out of box), IronPython untested.
+
+#### Serving a file
+
+    clipboardconfusion.py /etc/os-release
+
+NOTE file is assumed to be text (utf-8) and **not** binary.
 
 ## Docker
 
