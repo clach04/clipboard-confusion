@@ -48,6 +48,11 @@ You can serve an encrypted file using bash shell [process substitution](http://w
         openssl enc -e -aes-256-cbc -in - -out - -base64 -salt -pbkdf2 -iter 10000  -pass pass:password | \
         ./clipboardconfusion.py /dev/stdin
 
+Windows alternative example:
+
+    "C:\Program Files\Git\mingw64\bin\openssl.exe"  enc -e -aes-256-cbc -in README.md -out README.md.enc -base64 -salt -pbkdf2 -iter 10000  -pass pass:password
+    py -3 clipboardconfusion.py README.md.enc
+
 The web interface has a work-in-progress support for decrypting (only) the contents of the textentry field in the form.
 It ONLY supports openssl encrypted with:
   * aes-256-cbc
