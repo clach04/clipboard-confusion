@@ -6,11 +6,14 @@ FROM python:3.11
 # no other dependencies, so no pip
 # TODO consider alternative python web/wsgi server
 
+
+
 ADD clipboardconfusion.py .
 # TODO chmod a+x clipboardconfusion.py
 # may need dos2unix
 ADD qrcode.min.js .
 ADD QR_icon.svg .
+ADD templates templates
 
 # TODO PORT environment variable, defaults to 8000
 # Allow external connections
