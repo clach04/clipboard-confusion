@@ -285,11 +285,15 @@ def application(environ, start_response):
     """
     log.debug('request_body %r', request_body)
     sys.stdout.flush()  # DEBUG
-    d = parse_qs(request_body.decode('utf-8'))
+    d = parse_qs(request_body.decode('utf-8'))  # FIXME causes issues #25 under Python 2 - seems to mojibake into Unicode string with raw byte values for utf-8
+    #d = parse_qs(request_body.decode('us-ascii'))  # No change in behavior to above
     log.debug('d %r', d)
     new_clipboard_text = d.get('newtext')
-    log.debug('new_clipboard_text %sr' % new_clipboard_text)
+    log.debug('new_clipboard_text %r' % new_clipboard_text)
+    log.debug('new_clipboard_text %s' % new_clipboard_text)
     if new_clipboard_text is not None:
+        log.debug('new_clipboard_text %r' % new_clipboard_text)
+        log.debug('new_clipboard_text %s' % new_clipboard_text)
         new_clipboard_text = ''.join(new_clipboard_text)
         new_clipboard_text = new_clipboard_text
         clipboard_copy(new_clipboard_text)
