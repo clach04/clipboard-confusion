@@ -2,6 +2,8 @@
 
 # clipboard-confusion
 
+Home page https://github.com/clach04/clipboard-confusion/
+
   * [Overview](#overview)
   * [Setup](#setup)
   * [Running](#running)
