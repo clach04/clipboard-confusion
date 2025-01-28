@@ -69,3 +69,8 @@ NOTE file is assumed to be text (utf-8) and **not** binary.
 ## History
 
 Based on https://github.com/clach04/toys4droids/blob/master/remote_clipboard.py
+
+## also see
+
+  * https://github.com/jon6fingrs/ghostboard
+
