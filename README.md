@@ -72,5 +72,6 @@ Based on https://github.com/clach04/toys4droids/blob/master/remote_clipboard.py
 
 ## also see
 
+  * https://github.com/Tanq16/local-content-share
   * https://github.com/jon6fingrs/ghostboard
 
