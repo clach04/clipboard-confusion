@@ -21,7 +21,12 @@ try:
         raise ImportError
 except ImportError:
     webbrowser = None
-from wsgiref.simple_server import make_server
+
+try:
+    import anywsgi
+except ImportError:
+    anywsgi = None
+    from wsgiref.simple_server import make_server
 
 try:
     # Python 3.8 and later
@@ -58,6 +63,7 @@ try:
 except ImportError:
     xerox = None
 
+is_py3 = sys.version_info >= (3,)
 
 log = logging.getLogger(__name__)
 logging.basicConfig()
@@ -289,13 +295,19 @@ def application(environ, start_response):
     """
     log.debug('request_body %r', request_body)
     sys.stdout.flush()  # DEBUG
-    d = parse_qs(request_body.decode('utf-8'))  # FIXME causes issues #25 under Python 2 - seems to mojibake into Unicode string with raw byte values for utf-8
+    if is_py3:
+        d = parse_qs(request_body.decode('utf-8'))
+    else:
+        d = parse_qs(request_body)
     #d = parse_qs(request_body.decode('us-ascii'))  # No change in behavior to above
     log.debug('d %r', d)
     new_clipboard_text = d.get('newtext')
     log.debug('new_clipboard_text %r' % new_clipboard_text)
     log.debug('new_clipboard_text %s' % new_clipboard_text)
     if new_clipboard_text is not None:
+        if not is_py3:
+            new_clipboard_text = new_clipboard_text[0]
+            new_clipboard_text = new_clipboard_text.decode('utf-8')
         log.debug('new_clipboard_text %r' % new_clipboard_text)
         log.debug('new_clipboard_text %s' % new_clipboard_text)
         new_clipboard_text = ''.join(new_clipboard_text)
@@ -368,8 +380,11 @@ def doit(filename=None):
     if webbrowser:
         webbrowser.open(qrcode_url)
 
-    httpd = make_server(hostname, port, application)
-    httpd.serve_forever()
+    if anywsgi:
+        anywsgi.my_start_server(application, listen_address=hostname, listen_port=port)
+    else:
+        httpd = make_server(hostname, port, application)
+        httpd.serve_forever()
 
 
 def main(argv=None):
