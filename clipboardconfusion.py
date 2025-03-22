@@ -23,7 +23,7 @@ except ImportError:
     webbrowser = None
 
 try:
-    import anywsgi
+    import anywsgi  # https://github.com/clach04/anywsgi-py/
 except ImportError:
     anywsgi = None
     from wsgiref.simple_server import make_server
