@@ -63,6 +63,7 @@ try:
 except ImportError:
     xerox = None
 
+is_py3 = sys.version_info >= (3,)
 
 log = logging.getLogger(__name__)
 logging.basicConfig()
@@ -294,13 +295,19 @@ def application(environ, start_response):
     """
     log.debug('request_body %r', request_body)
     sys.stdout.flush()  # DEBUG
-    d = parse_qs(request_body.decode('utf-8'))  # FIXME causes issues #25 under Python 2 - seems to mojibake into Unicode string with raw byte values for utf-8
+    if is_py3:
+        d = parse_qs(request_body.decode('utf-8'))
+    else:
+        d = parse_qs(request_body)
     #d = parse_qs(request_body.decode('us-ascii'))  # No change in behavior to above
     log.debug('d %r', d)
     new_clipboard_text = d.get('newtext')
     log.debug('new_clipboard_text %r' % new_clipboard_text)
     log.debug('new_clipboard_text %s' % new_clipboard_text)
     if new_clipboard_text is not None:
+        if not is_py3:
+            new_clipboard_text = new_clipboard_text[0]
+            new_clipboard_text = new_clipboard_text.decode('utf-8')
         log.debug('new_clipboard_text %r' % new_clipboard_text)
         log.debug('new_clipboard_text %s' % new_clipboard_text)
         new_clipboard_text = ''.join(new_clipboard_text)
