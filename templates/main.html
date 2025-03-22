@@ -171,7 +171,7 @@
         <label for="newtext">Current clipboard contents:</label>{{character_count_str}}
         <br />
         <!-- TODO There is way to get textarea to be 100 percent via CSS and/or javascript, however most browsers allow manual resizing of text area. See http://stackoverflow.com/questions/271067/how-can-i-make-a-textarea-100-width-without-overflowing-when-padding-is-present (using a textwrapper div) -->
-        <textarea class="form-control" id="newtext" name="newtext" accept-charset="utf-8" style="width:100%;height:50%">{{clipboard_contents}}</textarea>
+        <textarea class="form-control" id="newtext" name="newtext" accept-charset="utf-8" style="width:100%" rows="5">{{clipboard_contents}}</textarea>
         <br />
         <input class="btn btn-primary" type="submit" value="Update"/>
         <a href="/download">Download</a>  <!-- TODO styled (bootstrap?) button -->
