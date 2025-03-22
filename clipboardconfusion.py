@@ -224,7 +224,7 @@ def get_template(template_filename):
 def application(environ, start_response):
     status = '200 OK'
     response_headers = [
-        ('Content-Type', 'text/html'),
+        ('Content-Type', 'text/html; charset=utf-8'),
         ('Cache-Control', 'no-cache'),
         ('X-Content-Type-Options', 'nosniff'),  # no-sniff
     ]
@@ -234,7 +234,7 @@ def application(environ, start_response):
     print('DEBUG entry path_info %r' % path_info) ; sys.stdout.flush()
     if path_info == '/qrcode.min.js':
         response_headers = [
-            ('Content-Type', 'text/javascript'),
+            ('Content-Type', 'text/javascript; charset=utf-8'),
             ('Cache-Control', 'no-cache'),  # revisit this
             ('X-Content-Type-Options', 'nosniff'),  # no-sniff
         ]
@@ -242,12 +242,16 @@ def application(environ, start_response):
         return [qrcode_js_bytes]
     elif path_info == '/QR_icon.svg':
         response_headers = [
-            ('Content-Type', 'image/svg+xml'),
+            ('Content-Type', 'image/svg+xml; charset=utf-8'),
             #('Cache-Control', 'no-cache'),  # revisit this
             ('X-Content-Type-Options', 'nosniff'),  # no-sniff
         ]
         start_response(status, response_headers)
         return [qrcode_svg_bytes]
+    elif path_info == '/favicon.ico':
+        status = '404 NOT FOUND'
+        start_response(status, [('Content-Type', 'text/plain')])
+        return [status.encode('us-ascii')]
     elif path_info == '/download':
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
         result = clipboard_paste().encode('utf-8')
@@ -285,11 +289,15 @@ def application(environ, start_response):
     """
     log.debug('request_body %r', request_body)
     sys.stdout.flush()  # DEBUG
-    d = parse_qs(request_body.decode('utf-8'))
+    d = parse_qs(request_body.decode('utf-8'))  # FIXME causes issues #25 under Python 2 - seems to mojibake into Unicode string with raw byte values for utf-8
+    #d = parse_qs(request_body.decode('us-ascii'))  # No change in behavior to above
     log.debug('d %r', d)
     new_clipboard_text = d.get('newtext')
-    log.debug('new_clipboard_text %sr' % new_clipboard_text)
+    log.debug('new_clipboard_text %r' % new_clipboard_text)
+    log.debug('new_clipboard_text %s' % new_clipboard_text)
     if new_clipboard_text is not None:
+        log.debug('new_clipboard_text %r' % new_clipboard_text)
+        log.debug('new_clipboard_text %s' % new_clipboard_text)
         new_clipboard_text = ''.join(new_clipboard_text)
         new_clipboard_text = new_clipboard_text
         clipboard_copy(new_clipboard_text)

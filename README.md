@@ -1,4 +1,20 @@
+-*- coding: utf-8 -*-
+
 # clipboard-confusion
+
+Home page https://github.com/clach04/clipboard-confusion/
+
+  * [Overview](#overview)
+  * [Setup](#setup)
+  * [Running](#running)
+    + [Natively](#natively)
+      - [Serving a file](#serving-a-file)
+    + [Docker](#docker)
+  * [History](#history)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+## Overview
 
 Pure Python 2 and 3 in-memory, single document pastebin, with optional clipboard support with some qrcode support
 
@@ -72,3 +88,9 @@ It ONLY supports openssl encrypted with:
 ## History
 
 Based on https://github.com/clach04/toys4droids/blob/master/remote_clipboard.py
+
+## also see
+
+  * https://github.com/Tanq16/local-content-share
+  * https://github.com/jon6fingrs/ghostboard
+
