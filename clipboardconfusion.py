@@ -21,7 +21,12 @@ try:
         raise ImportError
 except ImportError:
     webbrowser = None
-from wsgiref.simple_server import make_server
+
+try:
+    import anywsgi
+except ImportError:
+    anywsgi = None
+    from wsgiref.simple_server import make_server
 
 try:
     # Python 3.8 and later
@@ -368,8 +373,11 @@ def doit(filename=None):
     if webbrowser:
         webbrowser.open(qrcode_url)
 
-    httpd = make_server(hostname, port, application)
-    httpd.serve_forever()
+    if anywsgi:
+        anywsgi.my_start_server(application, listen_address=hostname, listen_port=port)
+    else:
+        httpd = make_server(hostname, port, application)
+        httpd.serve_forever()
 
 
 def main(argv=None):
