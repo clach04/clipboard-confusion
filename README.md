@@ -74,4 +74,5 @@ Based on https://github.com/clach04/toys4droids/blob/master/remote_clipboard.py
 
   * https://github.com/Tanq16/local-content-share
   * https://github.com/jon6fingrs/ghostboard
-
+  * https://github.com/jedisct1/piknik
+  * https://github.com/shrimqy/Sefirah-Android
