@@ -248,6 +248,10 @@ def application(environ, start_response):
         ]
         start_response(status, response_headers)
         return [qrcode_svg_bytes]
+    elif path_info == '/favicon.ico':
+        status = '404 NOT FOUND'
+        start_response(status, [('Content-Type', 'text/plain')])
+        return [status.encode('us-ascii')]
     elif path_info == '/download':
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
         result = clipboard_paste().encode('utf-8')
