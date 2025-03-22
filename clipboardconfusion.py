@@ -224,7 +224,7 @@ def get_template(template_filename):
 def application(environ, start_response):
     status = '200 OK'
     response_headers = [
-        ('Content-Type', 'text/html'),
+        ('Content-Type', 'text/html; charset=utf-8'),
         ('Cache-Control', 'no-cache'),
         ('X-Content-Type-Options', 'nosniff'),  # no-sniff
     ]
@@ -234,7 +234,7 @@ def application(environ, start_response):
     print('DEBUG entry path_info %r' % path_info) ; sys.stdout.flush()
     if path_info == '/qrcode.min.js':
         response_headers = [
-            ('Content-Type', 'text/javascript'),
+            ('Content-Type', 'text/javascript; charset=utf-8'),
             ('Cache-Control', 'no-cache'),  # revisit this
             ('X-Content-Type-Options', 'nosniff'),  # no-sniff
         ]
@@ -242,7 +242,7 @@ def application(environ, start_response):
         return [qrcode_js_bytes]
     elif path_info == '/QR_icon.svg':
         response_headers = [
-            ('Content-Type', 'image/svg+xml'),
+            ('Content-Type', 'image/svg+xml; charset=utf-8'),
             #('Cache-Control', 'no-cache'),  # revisit this
             ('X-Content-Type-Options', 'nosniff'),  # no-sniff
         ]
