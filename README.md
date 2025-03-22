@@ -66,6 +66,13 @@ NOTE file is assumed to be text (utf-8) and **not** binary.
     echo Open http://localhost:1234/
 
 
+## qrcodes
+
+  * zxing for Android is a good free qrcode scanner https://play.google.com/store/apps/details?id=com.google.zxing.client.android
+  * https://www.irfanview.com/ has a qrcode scanner/reader plugin for Microsoft Windows
+  * https://github.com/zxing-js/library
+      * https://github.com/zxing-js/browser
+
 ## History
 
 Based on https://github.com/clach04/toys4droids/blob/master/remote_clipboard.py
