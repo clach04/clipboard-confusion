@@ -84,3 +84,4 @@ Based on https://github.com/clach04/toys4droids/blob/master/remote_clipboard.py
   * https://github.com/jedisct1/piknik
   * https://github.com/shrimqy/Sefirah-Android
   * https://github.com/Sathvik-Rao/ClipCascade - maybe possible to support api that this uses?
+  * https://github.com/tk0miya/rpbcopyd - command line tools (Mac)
