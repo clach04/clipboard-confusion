@@ -5,7 +5,7 @@
 """Pure Python 2 and 3 in-memory, single document pastebin, with optional clipboard support with some qrcode support
 """
 
-version_tuple = __version_info__ = (0, 0, 2)
+version_tuple = __version_info__ = (0, 0, 3, 'git')
 version = version_string = __version__ = '.'.join(map(str, __version_info__))
 
 import logging
