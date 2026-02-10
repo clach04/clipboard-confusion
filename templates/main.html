@@ -211,6 +211,13 @@
     </details>
 
     <hr>
+    <h2 id="clipboard_contents_markdown">Markdown Render</h2>
+    <details>
+      <summary>Markdown Rendered HTML - Click to Expand/Collapse</summary>
+      <div id="markdown_field_html"></div>
+    </details>
+
+    <hr>
 
     <a href="https://github.com/clach04/clipboard-confusion/">
     Clipboard Confusion - a single file, in-memory pastebin
@@ -238,6 +245,15 @@
         text_entry_field.setSelectionRange(0, 99999); /* For mobile devices */
         copyTextToClipboard(text_entry_field.value);
     });
+    </script>
+
+<!-- FIXME local serving ... -->
+<!-- TODO SRI integrity ... -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+
+    <!-- marked.js Markdown conversion to HTML -->
+    <script>
+      document.getElementById('markdown_field_html').innerHTML = marked.parse(document.getElementById('newtext').textContent);
     </script>
 
 </body>
