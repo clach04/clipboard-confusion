@@ -5,7 +5,7 @@
 """Pure Python 2 and 3 in-memory, single document pastebin, with optional clipboard support with some qrcode support
 """
 
-version_tuple = __version_info__ = (0, 0, 2, 'git')
+version_tuple = __version_info__ = (0, 0, 3, 'git')
 version = version_string = __version__ = '.'.join(map(str, __version_info__))
 
 import logging
@@ -212,6 +212,18 @@ f = open(qr_code_js_filename, 'rb')
 qrcode_js_bytes = f.read()
 f.close()
 
+marked_js_filename = 'marked.umd.js'  # https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js
+if not os.path.exists(marked_js_filename):
+    f = open(marked_js_filename, 'rb')
+    marked_js_bytes = f.read()
+    f.close()
+
+bootstrap5_js_filename = 'bootstrap5.1.3.min.css'  # https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
+if not os.path.exists(bootstrap5_js_filename):
+    f = open(bootstrap5_js_filename, 'rb')
+    bootstrap5_js_bytes = f.read()
+    f.close()
+
 # TODO consider using PNG instead?
 qr_code_svg_filename = 'QR_icon.svg'
 f = open(qr_code_svg_filename, 'rb')
@@ -246,6 +258,22 @@ def application(environ, start_response):
         ]
         start_response(status, response_headers)
         return [qrcode_js_bytes]
+    elif path_info == '/' + bootstrap5_js_filename:
+        response_headers = [
+            ('Content-Type', 'text/css'),
+            ('Cache-Control', 'no-cache'),  # revisit this
+            ('X-Content-Type-Options', 'nosniff'),  # no-sniff
+        ]
+        start_response(status, response_headers)
+        return [bootstrap5]
+    elif path_info == '/marked.umd.js':
+        response_headers = [
+            ('Content-Type', 'text/javascript; charset=utf-8'),
+            ('Cache-Control', 'no-cache'),  # revisit this
+            ('X-Content-Type-Options', 'nosniff'),  # no-sniff
+        ]
+        start_response(status, response_headers)
+        return [marked_js_bytes]
     elif path_info == '/QR_icon.svg':
         response_headers = [
             ('Content-Type', 'image/svg+xml; charset=utf-8'),

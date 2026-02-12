@@ -4,6 +4,10 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
 <title>Clipboard Confusion</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -80,7 +84,7 @@
 
     window.onload=init; /* <body onload="init()"> */
 </script>
-    
+
 <script src="./qrcode.min.js"></script>
 <script>
     // Show the QR-Code of a "value" attribute (when the QR-Code icon is clicked).
@@ -282,9 +286,20 @@
             <!-- TODO button to download decrypted file using textfield as encrypte source -->
         </form>
         <br />
+    <ul>
+        <!--
+        This breaks typing in content into form!?
+        <li><a href="#clipboard_entry">Entry</li>
+        <li><a href="#clipboard_contents_code">Code (no line wrap)</li>
+        <li><a href="#clipboard_contents_html">HTML (line wrapped)</li>
+        -->
+    </ul>
+
+    <hr>
+    <h2 id="clipboard_entry">Entry</h2>
 
     <form accept-charset="utf-8" action="setclipboard" method="POST" id="myform" name="myform">
-        <label for="newtext">Current clipboard contents:</label>{{character_count_str}}
+        <label for="newtext">Current clipboard contents:</label> {{character_count_str}}
         <br />
         <!-- TODO There is way to get textarea to be 100 percent via CSS and/or javascript, however most browsers allow manual resizing of text area. See http://stackoverflow.com/questions/271067/how-can-i-make-a-textarea-100-width-without-overflowing-when-padding-is-present (using a textwrapper div) -->
         <textarea class="form-control" id="newtext" name="newtext" accept-charset="utf-8" style="width:100%" rows="5">{{clipboard_contents}}</textarea>
@@ -296,8 +311,25 @@
     {{character_count_str}}
 
     <hr>
-
+    <h2 id="clipboard_contents_code">Code formatted</h2>
+    <details>
+      <summary>Code formatted - Click to Expand/Collapse</summary>
     <pre><code id="clipboard_contents">{{clipboard_contents}}</code></pre>
+    </details>
+
+    <hr>
+    <h2 id="clipboard_contents_html">HTML formatted</h2>
+    <details>
+      <summary>raw HTML formatted - Click to Expand/Collapse</summary>
+{{clipboard_contents}}
+    </details>
+
+    <hr>
+    <h2 id="clipboard_contents_markdown">Markdown Render</h2>
+    <details>
+      <summary>Markdown Rendered HTML - Click to Expand/Collapse</summary>
+      <div id="markdown_field_html"></div>
+    </details>
 
     <hr>
 
@@ -327,6 +359,15 @@
         text_entry_field.setSelectionRange(0, 99999); /* For mobile devices */
         copyTextToClipboard(text_entry_field.value);
     });
+    </script>
+
+<!-- FIXME local serving ... -->
+<!-- TODO SRI integrity ... -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+
+    <!-- marked.js Markdown conversion to HTML -->
+    <script>
+      document.getElementById('markdown_field_html').innerHTML = marked.parse(document.getElementById('newtext').textContent);
     </script>
 
 </body>

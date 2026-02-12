@@ -85,6 +85,13 @@ It ONLY supports openssl encrypted with:
     echo Open http://localhost:1234/
 
 
+## qrcodes
+
+  * zxing for Android is a good free qrcode scanner https://play.google.com/store/apps/details?id=com.google.zxing.client.android
+  * https://www.irfanview.com/ has a qrcode scanner/reader plugin for Microsoft Windows
+  * https://github.com/zxing-js/library
+      * https://github.com/zxing-js/browser
+
 ## History
 
 Based on https://github.com/clach04/toys4droids/blob/master/remote_clipboard.py
@@ -93,4 +100,7 @@ Based on https://github.com/clach04/toys4droids/blob/master/remote_clipboard.py
 
   * https://github.com/Tanq16/local-content-share
   * https://github.com/jon6fingrs/ghostboard
-
+  * https://github.com/jedisct1/piknik
+  * https://github.com/shrimqy/Sefirah-Android
+  * https://github.com/Sathvik-Rao/ClipCascade - maybe possible to support api that this uses?
+  * https://github.com/tk0miya/rpbcopyd - command line tools (Mac)
