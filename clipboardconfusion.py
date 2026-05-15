@@ -8,6 +8,7 @@
 version_tuple = __version_info__ = (0, 0, 3, 'git')
 version = version_string = __version__ = '.'.join(map(str, __version_info__))
 
+import cgi  # DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13
 import logging
 import os
 import socket
@@ -238,6 +239,109 @@ def get_template(template_filename):
     template_string = template_string.decode('utf-8')
     return template_string
 
+try:
+    text_type = unicode  # Python 2
+except NameError:
+    text_type = str  # Python 3
+
+def to_bytes(value):
+    if isinstance(value, bytes):
+        return value
+    if isinstance(value, text_type):
+        return value.encode('utf-8')
+    return text_type(value).encode('utf-8')
+
+def respond(start_response, status, body, content_type='text/plain; charset=utf-8'):
+    payload = to_bytes(body)
+    headers = [
+        ('Content-Type', content_type),
+        ('Content-Length', str(len(payload))),
+    ]
+    start_response(status, headers)
+    return [payload]
+
+def iter_file_fields(field):
+    if isinstance(field, list):
+        for item in field:
+            for nested in iter_file_fields(item):
+                yield nested
+        return
+
+    if getattr(field, 'filename', None):
+        yield field
+        return
+
+    nested = getattr(field, 'list', None)
+    if nested:
+        for item in nested:
+            for nested_item in iter_file_fields(item):
+                yield nested_item
+
+MAX_UPLOAD_BYTES = 1024
+def file_upload(environ, start_response):  # TODO append option
+    """Example client:
+        curl -F "file=@hello.txt;filename=server_file.txt" http://localhost:8080
+    """
+    content_type = environ.get('CONTENT_TYPE', '')
+    if not content_type.lower().startswith('multipart/form-data'):
+        return respond(start_response, '400 Bad Request', 'Expected multipart/form-data\n')
+
+    try:
+        form = cgi.FieldStorage(
+            fp=environ['wsgi.input'],
+            environ=environ,
+            keep_blank_values=True,
+        )
+    except Exception as exc:
+        return respond(start_response, '400 Bad Request', 'Invalid multipart payload: %s\n' % exc)
+
+    file_fields = []
+    if getattr(form, 'list', None):
+        for item in form.list:
+            for file_item in iter_file_fields(item):
+                file_fields.append(file_item)
+
+    if not file_fields:
+        return respond(start_response, '400 Bad Request', 'No uploaded file fields were provided\n')
+
+    # TODO process....
+    print(dir(file_fields))
+    for file_field in file_fields:
+        print(dir(file_field))
+        print(file_field.filename or '<unnamed>')
+        print(file_field.length or -1)
+
+        stream = file_field.file
+        if stream is None:
+            return respond(start_response, '400 Bad Request', 'Missing upload file\n')
+
+        total = 0
+        chunks = []
+        while True:
+            #print('DEBUG: read chunk..')
+            chunk = stream.read(1024)  # TODO is a re-read needed until EOF or max file size? I.e. actually chunk it properly... Suspect not...
+            if not chunk:
+                break  # hit EOF
+            chunks.append(chunk)
+            #print('DEBUG: %r' % (chunk,))
+            total += len(chunk)
+            if total > MAX_UPLOAD_BYTES:
+                return respond(start_response, '400 Bad Request', 'upload file too large > %d\n' % (MAX_UPLOAD_BYTES,))
+
+    # if we got here, chunk contains data - needs decoding and potentually newline strippping - we're assuming its a URL for now... not an actual full file upload
+    complete_string = b''.join(chunks).decode('utf-8') # TODO review, is hardcoded reasonable?
+    complete_string = complete_string.rstrip()  # quick way to strip '\r\n'
+    clipboard_copy(complete_string)
+
+    status = '200 OK'
+    response_headers = [
+        ('Content-Type', 'text/html; charset=utf-8'),
+        ('Cache-Control', 'no-cache'),
+        ('X-Content-Type-Options', 'nosniff'),  # no-sniff
+    ]
+    start_response(status, response_headers)
+    result = b'FIXME / TODO redirect'
+    return [result]
 
 def application(environ, start_response):
     status = '200 OK'
@@ -286,6 +390,8 @@ def application(environ, start_response):
         status = '404 NOT FOUND'
         start_response(status, [('Content-Type', 'text/plain')])
         return [status.encode('us-ascii')]
+    elif path_info == '/upload':  # Just assume POST
+        return file_upload(environ, start_response)
     elif path_info == '/download':
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
         result = clipboard_paste().encode('utf-8')
