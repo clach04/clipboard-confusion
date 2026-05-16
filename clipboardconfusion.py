@@ -348,7 +348,7 @@ def file_upload(environ, start_response):  # TODO append option
         ('X-Content-Type-Options', 'nosniff'),  # no-sniff
     ]
     start_response(status, response_headers)
-    result = b'FIXME / TODO redirect'
+    result = b'Upload successful'  # FIXME / TODO redirect
     return [result]
 
 def application(environ, start_response):
