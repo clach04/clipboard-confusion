@@ -62,12 +62,19 @@ No PWA available so use a share tool like https://github.com/Rouji/Hupl (NOTE as
 
 Sample URLs, replace with your address:
 
-
   * http://YOU_ADDRESS:8000/upload
       * replaces content
   * http://YOU_ADDRESS:8000/upload_append
       * append content
 
+Test with:
+
+  * Hupl for Android
+  * cURL command line:
+
+        curl -F "file=@hello.txt;filename=server_file.txt" http://YOU_ADDRESS:8000/upload
+        # where hello.txt contains line of text, localhost sample:
+        curl -F "file=@hello.txt;filename=server_file.txt" http://localhost:8000/upload
 
 ### Docker
 
