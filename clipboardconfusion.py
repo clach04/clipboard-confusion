@@ -277,7 +277,7 @@ def iter_file_fields(field):
             for nested_item in iter_file_fields(item):
                 yield nested_item
 
-MAX_UPLOAD_BYTES = 1024
+MAX_UPLOAD_BYTES = int(os.environ.get('MAX_UPLOAD_BYTES', 1024))  # no error check, if OS var not an integer crash and burn here
 def file_upload(environ, start_response):  # TODO append option
     """Example client:
         curl -F "file=@hello.txt;filename=server_file.txt" http://localhost:8080
