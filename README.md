@@ -75,6 +75,19 @@ It ONLY supports openssl encrypted with:
   * salt
   * PBKDF2 with itereration count of 10000 (10,000, i.e. 10K). NOTE in 2023 this iteration count is considered too small
 
+#### Share URLs from Android
+
+No PWA available so use a share tool like https://github.com/Rouji/Hupl (NOTE as of 2026-05-15 need to use patched version, e.g. https://github.com/clach04/Hupl/releases/tag/plaintext_debug).
+
+Sample URLs, replace with your address:
+
+
+  * http://YOU_ADDRESS:8000/upload
+      * replaces content
+  * http://YOU_ADDRESS:8000/upload_append
+      * append content
+
+
 ### Docker
 
     #docker build -t clipboardconfusion .
