@@ -56,6 +56,19 @@ Also runs under Jython 2.5+ (2.2 doesn't ship wsgi support out of box), IronPyth
 
 NOTE file is assumed to be text (utf-8) and **not** binary.
 
+#### Share URLs from Android
+
+No PWA available so use a share tool like https://github.com/Rouji/Hupl (NOTE as of 2026-05-15 need to use patched version, e.g. https://github.com/clach04/Hupl/releases/tag/plaintext_debug).
+
+Sample URLs, replace with your address:
+
+
+  * http://YOU_ADDRESS:8000/upload
+      * replaces content
+  * http://YOU_ADDRESS:8000/upload_append
+      * append content
+
+
 ### Docker
 
     #docker build -t clipboardconfusion .

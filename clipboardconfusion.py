@@ -304,6 +304,12 @@ def file_upload(environ, start_response):  # TODO append option
     if not file_fields:
         return respond(start_response, '400 Bad Request', 'No uploaded file fields were provided\n')
 
+    path_info = environ['PATH_INFO']
+    if path_info.startswith('/upload_append'):
+        append_to_clipboard = True
+    else:
+        append_to_clipboard = False
+
     # TODO process....
     print(dir(file_fields))
     for file_field in file_fields:
@@ -331,6 +337,8 @@ def file_upload(environ, start_response):  # TODO append option
     # if we got here, chunk contains data - needs decoding and potentually newline strippping - we're assuming its a URL for now... not an actual full file upload
     complete_string = b''.join(chunks).decode('utf-8') # TODO review, is hardcoded reasonable?
     complete_string = complete_string.rstrip()  # quick way to strip '\r\n'
+    if append_to_clipboard:
+        complete_string = clipboard_paste() + '\n' + complete_string
     clipboard_copy(complete_string)
 
     status = '200 OK'
@@ -390,7 +398,7 @@ def application(environ, start_response):
         status = '404 NOT FOUND'
         start_response(status, [('Content-Type', 'text/plain')])
         return [status.encode('us-ascii')]
-    elif path_info == '/upload':  # Just assume POST
+    elif path_info.startswith('/upload'):  # '/upload_append' - at this point, just assume POST
         return file_upload(environ, start_response)
     elif path_info == '/download':
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
